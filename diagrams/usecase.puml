@@ -1,0 +1,41 @@
+@startuml  Car Repare Station
+
+title Car Repear Station
+
+
+
+:Administrator: as A
+:Worker: as W
+:Client: as C
+
+
+(watch order status) as O
+(pay order) as P
+(watch details list) as WDL
+(create worker) as CW
+(watch details list) as OD
+(create client) as CC
+(authorize) as Au
+(create order) as CO
+(create details list) as CD
+(change order status) as COS
+(update details list) as UDL
+(update details list) as UDL1
+
+
+C -- O
+P .up.> O : "include"
+CO -- A
+W -- WDL
+A -- CW
+OD -- A
+CD .up.> WDL : "include"
+UDL1 .up.> WDL : "include"
+A -- CC
+A -left- Au
+C -left- Au
+W -left- Au
+W -- COS
+A -- UDL
+
+@enduml
