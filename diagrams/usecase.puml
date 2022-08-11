@@ -21,9 +21,11 @@ title Car Repear Station
 (change order status) as COS
 (update details list) as UDL
 (update details list) as UDL1
-
+(signup-by-link) as SBL
+(logout) as LO
 
 C -- O
+C -- SBL
 P .up.> O : "include"
 CO -- A
 W -- WDL
@@ -31,6 +33,7 @@ A -- CW
 OD -- A
 CD .up.> WDL : "include"
 UDL1 .up.> WDL : "include"
+Au .up.> LO :"include"
 A -- CC
 A -left- Au
 C -left- Au
