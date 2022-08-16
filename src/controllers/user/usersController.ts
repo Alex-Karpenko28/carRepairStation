@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Header, Path, Post, Route, Tags } from "tsoa";
 import { CreateUserDto, LoginDto, Tokens, User } from "./user.dto";
+import { UsersService } from "./usersService";
 
 @Tags("user")
 @Route("/users")
@@ -11,7 +12,7 @@ export class UsersController extends Controller {
 
   @Get("/{userId}")
   public async getUser(@Path() userId: number): Promise<User> {
-    return null;
+    return new UsersService().get(userId);
   }
 
   @Post("/login")

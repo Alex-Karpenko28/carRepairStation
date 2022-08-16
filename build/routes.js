@@ -1,9 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RegisterRoutes = void 0;
 /* tslint:disable */
 /* eslint-disable */
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { ValidationService, ValidateError, fetchMiddlewares } from '@tsoa/runtime';
+const runtime_1 = require("@tsoa/runtime");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UsersController } from './controllers/detail/detailsController';
+const detailsController_1 = require("./controllers/detail/detailsController");
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+const ordersController_1 = require("./controllers/order/ordersController");
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+const ordersPaymentController_1 = require("./controllers/orderPayment/ordersPaymentController");
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+const usersController_1 = require("./controllers/user/usersController");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 const models = {
     "CreateDetailDto": {
@@ -29,14 +38,6 @@ const models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UpdateOrderDtO": {
-        "dataType": "refObject",
-        "properties": {
-            "orderId": { "dataType": "double", "required": true },
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateOrderPaymentDto": {
         "dataType": "refObject",
         "properties": {
@@ -49,17 +50,10 @@ const models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UpdateOrderPaymentDtO": {
-        "dataType": "refObject",
-        "properties": {
-            "orderId": { "dataType": "double", "required": true },
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "User": {
         "dataType": "refObject",
         "properties": {
+            "id": { "dataType": "double", "required": true },
             "firstName": { "dataType": "string", "required": true },
             "lastName": { "dataType": "string", "required": true },
             "email": { "dataType": "string", "required": true },
@@ -100,20 +94,20 @@ const models = {
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
-const validationService = new ValidationService(models);
+const validationService = new runtime_1.ValidationService(models);
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-export function RegisterRoutes(app) {
+function RegisterRoutes(app) {
     // ###########################################################################################################
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-    app.get('/details', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.getAllDetails)), function UsersController_getAllDetails(request, response, next) {
+    app.get('/details', ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController)), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController.prototype.getAllDetails)), function DetailsController_getAllDetails(request, response, next) {
         const args = {};
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
+            const controller = new detailsController_1.DetailsController();
             const promise = controller.getAllDetails.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
@@ -122,7 +116,7 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/details/:detailId', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.getDetail)), function UsersController_getDetail(request, response, next) {
+    app.get('/details/:detailId', ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController)), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController.prototype.getDetail)), function DetailsController_getDetail(request, response, next) {
         const args = {
             detailId: { "in": "path", "name": "detailId", "required": true, "dataType": "double" },
         };
@@ -130,7 +124,7 @@ export function RegisterRoutes(app) {
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
+            const controller = new detailsController_1.DetailsController();
             const promise = controller.getDetail.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
@@ -139,7 +133,7 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/details/details', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.login)), function UsersController_login(request, response, next) {
+    app.post('/details', ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController)), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController.prototype.createDetail)), function DetailsController_createDetail(request, response, next) {
         const args = {
             body: { "in": "body", "name": "body", "required": true, "ref": "CreateDetailDto" },
         };
@@ -147,8 +141,8 @@ export function RegisterRoutes(app) {
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
-            const promise = controller.login.apply(controller, validatedArgs);
+            const controller = new detailsController_1.DetailsController();
+            const promise = controller.createDetail.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
         catch (err) {
@@ -156,16 +150,17 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/details/:detailId', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.updateOrder)), function UsersController_updateOrder(request, response, next) {
+    app.put('/details/:detailId', ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController)), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController.prototype.updateDetail)), function DetailsController_updateDetail(request, response, next) {
         const args = {
+            detailId: { "in": "path", "name": "detailId", "required": true, "dataType": "double" },
             body: { "in": "body", "name": "body", "required": true, "ref": "CreateDetailDto" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
-            const promise = controller.updateOrder.apply(controller, validatedArgs);
+            const controller = new detailsController_1.DetailsController();
+            const promise = controller.updateDetail.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
         catch (err) {
@@ -173,13 +168,30 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/orders', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.getAllOrders)), function UsersController_getAllOrders(request, response, next) {
+    app.delete('/details/:detailId', ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController)), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController.prototype.deleteDetail)), function DetailsController_deleteDetail(request, response, next) {
+        const args = {
+            detailId: { "in": "path", "name": "detailId", "required": true, "dataType": "double" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request, response);
+            const controller = new detailsController_1.DetailsController();
+            const promise = controller.deleteDetail.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, undefined, next);
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.get('/orders', ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController)), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController.prototype.getAllOrders)), function OrdersController_getAllOrders(request, response, next) {
         const args = {};
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
+            const controller = new ordersController_1.OrdersController();
             const promise = controller.getAllOrders.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
@@ -188,7 +200,7 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/orders/:orderId', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.getOrder)), function UsersController_getOrder(request, response, next) {
+    app.get('/orders/:orderId', ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController)), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController.prototype.getOrder)), function OrdersController_getOrder(request, response, next) {
         const args = {
             orderId: { "in": "path", "name": "orderId", "required": true, "dataType": "double" },
         };
@@ -196,7 +208,7 @@ export function RegisterRoutes(app) {
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
+            const controller = new ordersController_1.OrdersController();
             const promise = controller.getOrder.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
@@ -205,7 +217,7 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/orders/orders', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.createOrder)), function UsersController_createOrder(request, response, next) {
+    app.post('/orders', ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController)), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController.prototype.createOrder)), function OrdersController_createOrder(request, response, next) {
         const args = {
             body: { "in": "body", "name": "body", "required": true, "ref": "CreateOrderDto" },
         };
@@ -213,7 +225,7 @@ export function RegisterRoutes(app) {
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
+            const controller = new ordersController_1.OrdersController();
             const promise = controller.createOrder.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
@@ -222,15 +234,16 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/orders/:orderId', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.updateOrder)), function UsersController_updateOrder(request, response, next) {
+    app.put('/orders/:orderId', ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController)), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController.prototype.updateOrder)), function OrdersController_updateOrder(request, response, next) {
         const args = {
-            body: { "in": "body", "name": "body", "required": true, "ref": "UpdateOrderDtO" },
+            orderId: { "in": "path", "name": "orderId", "required": true, "dataType": "double" },
+            body: { "in": "body", "name": "body", "required": true, "ref": "CreateOrderDto" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
+            const controller = new ordersController_1.OrdersController();
             const promise = controller.updateOrder.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
@@ -239,7 +252,7 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.delete('/orders/:orderId', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.deleteOrder)), function UsersController_deleteOrder(request, response, next) {
+    app.delete('/orders/:orderId', ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController)), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController.prototype.deleteOrder)), function OrdersController_deleteOrder(request, response, next) {
         const args = {
             orderId: { "in": "path", "name": "orderId", "required": true, "dataType": "double" },
         };
@@ -247,7 +260,7 @@ export function RegisterRoutes(app) {
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
+            const controller = new ordersController_1.OrdersController();
             const promise = controller.deleteOrder.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
@@ -256,13 +269,13 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/orderPayment', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.getAllPayment)), function UsersController_getAllPayment(request, response, next) {
+    app.get('/orderPayment', ...((0, runtime_1.fetchMiddlewares)(ordersPaymentController_1.OrderPaymentController)), ...((0, runtime_1.fetchMiddlewares)(ordersPaymentController_1.OrderPaymentController.prototype.getAllPayment)), function OrderPaymentController_getAllPayment(request, response, next) {
         const args = {};
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
+            const controller = new ordersPaymentController_1.OrderPaymentController();
             const promise = controller.getAllPayment.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
@@ -271,7 +284,7 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/orderPayment/:orderPaymentId', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.getOrder)), function UsersController_getOrder(request, response, next) {
+    app.get('/orderPayment/:orderPaymentId', ...((0, runtime_1.fetchMiddlewares)(ordersPaymentController_1.OrderPaymentController)), ...((0, runtime_1.fetchMiddlewares)(ordersPaymentController_1.OrderPaymentController.prototype.getOrderPayment)), function OrderPaymentController_getOrderPayment(request, response, next) {
         const args = {
             orderPaymentId: { "in": "path", "name": "orderPaymentId", "required": true, "dataType": "double" },
         };
@@ -279,8 +292,8 @@ export function RegisterRoutes(app) {
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
-            const promise = controller.getOrder.apply(controller, validatedArgs);
+            const controller = new ordersPaymentController_1.OrderPaymentController();
+            const promise = controller.getOrderPayment.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
         catch (err) {
@@ -288,7 +301,7 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/orderPayment/orderPayment', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.createOrderPayment)), function UsersController_createOrderPayment(request, response, next) {
+    app.post('/orderPayment', ...((0, runtime_1.fetchMiddlewares)(ordersPaymentController_1.OrderPaymentController)), ...((0, runtime_1.fetchMiddlewares)(ordersPaymentController_1.OrderPaymentController.prototype.createOrderPayment)), function OrderPaymentController_createOrderPayment(request, response, next) {
         const args = {
             body: { "in": "body", "name": "body", "required": true, "ref": "CreateOrderPaymentDto" },
         };
@@ -296,7 +309,7 @@ export function RegisterRoutes(app) {
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
+            const controller = new ordersPaymentController_1.OrderPaymentController();
             const promise = controller.createOrderPayment.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
@@ -305,16 +318,17 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/orderPayment/:orderPaymentId', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.updateOrder)), function UsersController_updateOrder(request, response, next) {
+    app.put('/orderPayment/:orderPaymentId', ...((0, runtime_1.fetchMiddlewares)(ordersPaymentController_1.OrderPaymentController)), ...((0, runtime_1.fetchMiddlewares)(ordersPaymentController_1.OrderPaymentController.prototype.updateOrderPayment)), function OrderPaymentController_updateOrderPayment(request, response, next) {
         const args = {
-            body: { "in": "body", "name": "body", "required": true, "ref": "UpdateOrderPaymentDtO" },
+            orderPaymentId: { "in": "path", "name": "orderPaymentId", "required": true, "dataType": "double" },
+            body: { "in": "body", "name": "body", "required": true, "ref": "CreateOrderPaymentDto" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
-            const promise = controller.updateOrder.apply(controller, validatedArgs);
+            const controller = new ordersPaymentController_1.OrderPaymentController();
+            const promise = controller.updateOrderPayment.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
         catch (err) {
@@ -322,13 +336,13 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/users', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.getAllUser)), function UsersController_getAllUser(request, response, next) {
+    app.get('/users', ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController)), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController.prototype.getAllUser)), function UsersController_getAllUser(request, response, next) {
         const args = {};
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
+            const controller = new usersController_1.UsersController();
             const promise = controller.getAllUser.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
@@ -337,7 +351,7 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/users/:userId', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.getUser)), function UsersController_getUser(request, response, next) {
+    app.get('/users/:userId', ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController)), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController.prototype.getUser)), function UsersController_getUser(request, response, next) {
         const args = {
             userId: { "in": "path", "name": "userId", "required": true, "dataType": "double" },
         };
@@ -345,7 +359,7 @@ export function RegisterRoutes(app) {
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
+            const controller = new usersController_1.UsersController();
             const promise = controller.getUser.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
@@ -354,7 +368,7 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/users/login', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.login)), function UsersController_login(request, response, next) {
+    app.post('/users/login', ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController)), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController.prototype.login)), function UsersController_login(request, response, next) {
         const args = {
             body: { "in": "body", "name": "body", "required": true, "ref": "LoginDto" },
         };
@@ -362,7 +376,7 @@ export function RegisterRoutes(app) {
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
+            const controller = new usersController_1.UsersController();
             const promise = controller.login.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
@@ -371,7 +385,7 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/users/signup-by-link/:link', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.signUpByLink)), function UsersController_signUpByLink(request, response, next) {
+    app.get('/users/signup-by-link/:link', ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController)), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController.prototype.signUpByLink)), function UsersController_signUpByLink(request, response, next) {
         const args = {
             link: { "in": "path", "name": "link", "required": true, "dataType": "string" },
         };
@@ -379,7 +393,7 @@ export function RegisterRoutes(app) {
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
+            const controller = new usersController_1.UsersController();
             const promise = controller.signUpByLink.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
@@ -388,7 +402,7 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/users', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.createUser)), function UsersController_createUser(request, response, next) {
+    app.post('/users', ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController)), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController.prototype.createUser)), function UsersController_createUser(request, response, next) {
         const args = {
             body: { "in": "body", "name": "body", "required": true, "ref": "CreateUserDto" },
         };
@@ -396,7 +410,7 @@ export function RegisterRoutes(app) {
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
+            const controller = new usersController_1.UsersController();
             const promise = controller.createUser.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
@@ -405,7 +419,7 @@ export function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/users/logout', ...(fetchMiddlewares(UsersController)), ...(fetchMiddlewares(UsersController.prototype.logOut)), function UsersController_logOut(request, response, next) {
+    app.post('/users/logout', ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController)), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController.prototype.logOut)), function UsersController_logOut(request, response, next) {
         const args = {
             authorization: { "in": "header", "name": "authorization", "required": true, "dataType": "string" },
         };
@@ -413,7 +427,7 @@ export function RegisterRoutes(app) {
         let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
-            const controller = new UsersController();
+            const controller = new usersController_1.UsersController();
             const promise = controller.logOut.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
@@ -499,11 +513,12 @@ export function RegisterRoutes(app) {
             }
         });
         if (Object.keys(fieldErrors).length > 0) {
-            throw new ValidateError(fieldErrors, '');
+            throw new runtime_1.ValidateError(fieldErrors, '');
         }
         return values;
     }
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 }
+exports.RegisterRoutes = RegisterRoutes;
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 //# sourceMappingURL=routes.js.map

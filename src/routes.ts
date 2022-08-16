@@ -7,7 +7,7 @@ import { DetailsController } from './controllers/detail/detailsController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { OrdersController } from './controllers/order/ordersController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { OrderPaymentController } from './controllers/orderPayment/orderPaymentServise';
+import { OrderPaymentController } from './controllers/orderPayment/ordersPaymentController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { UsersController } from './controllers/user/usersController';
 import type { RequestHandler } from 'express';
@@ -54,6 +54,7 @@ const models: TsoaRoute.Models = {
     "User": {
         "dataType": "refObject",
         "properties": {
+            "id": {"dataType":"double","required":true},
             "firstName": {"dataType":"string","required":true},
             "lastName": {"dataType":"string","required":true},
             "email": {"dataType":"string","required":true},

@@ -8,38 +8,39 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 import { Body, Controller, Get, Path, Post, Put, Route, Tags } from "tsoa";
-let UsersController = class UsersController extends Controller {
+let OrderPaymentController = class OrderPaymentController extends Controller {
     async getAllPayment() {
         return null;
     }
-    async getOrder(orderPaymentId) {
+    async getOrderPayment(orderPaymentId) {
         return null;
     }
     async createOrderPayment(body) {
         return null;
     }
-    async updateOrder(body) {
+    async updateOrderPayment(orderPaymentId, body) {
         return null;
     }
 };
 __decorate([
     Get()
-], UsersController.prototype, "getAllPayment", null);
+], OrderPaymentController.prototype, "getAllPayment", null);
 __decorate([
     Get("/{orderPaymentId}"),
     __param(0, Path())
-], UsersController.prototype, "getOrder", null);
+], OrderPaymentController.prototype, "getOrderPayment", null);
 __decorate([
     Post(),
     __param(0, Body())
-], UsersController.prototype, "createOrderPayment", null);
+], OrderPaymentController.prototype, "createOrderPayment", null);
 __decorate([
     Put("/{orderPaymentId}"),
-    __param(0, Body())
-], UsersController.prototype, "updateOrder", null);
-UsersController = __decorate([
+    __param(0, Path()),
+    __param(1, Body())
+], OrderPaymentController.prototype, "updateOrderPayment", null);
+OrderPaymentController = __decorate([
     Tags("orderPayment"),
     Route("/orderPayment")
-], UsersController);
-export { UsersController };
+], OrderPaymentController);
+export { OrderPaymentController };
 //# sourceMappingURL=orderPaymentServise.js.map

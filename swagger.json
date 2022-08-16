@@ -96,6 +96,10 @@
 			},
 			"User": {
 				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
 					"firstName": {
 						"type": "string"
 					},
@@ -110,6 +114,7 @@
 					}
 				},
 				"required": [
+					"id",
 					"firstName",
 					"lastName",
 					"email",

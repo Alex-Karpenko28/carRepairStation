@@ -17,6 +17,7 @@ export interface Tokens {
 }
 
 export interface User {
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
