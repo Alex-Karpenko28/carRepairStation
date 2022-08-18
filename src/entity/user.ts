@@ -10,12 +10,8 @@ import {
 } from "typeorm";
 import { OrderPayment } from "./orderPayment";
 import { Order } from "./order";
+import { UserRole } from "../user/userDto"
 
-export enum UserRole {
-  ADMIN = "admin",
-  WORKER = "worker",
-  CLIENT = "client",
-}
 
 @Entity("user")
 @Unique(["login", "email"])

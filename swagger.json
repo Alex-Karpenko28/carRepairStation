@@ -94,7 +94,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"User": {
+			"UserDto": {
 				"properties": {
 					"id": {
 						"type": "number",
@@ -123,18 +123,14 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"Tokens": {
+			"Token": {
 				"properties": {
 					"accessToken": {
-						"type": "string"
-					},
-					"refreshToken": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"accessToken",
-					"refreshToken"
+					"accessToken"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -155,13 +151,24 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"UserRole": {
+				"enum": [
+					"admin",
+					"worker",
+					"client"
+				],
+				"type": "string"
+			},
 			"CreateUserDto": {
 				"properties": {
 					"login": {
 						"type": "string"
 					},
-					"role": {
+					"password": {
 						"type": "string"
+					},
+					"role": {
+						"$ref": "#/components/schemas/UserRole"
 					},
 					"firstName": {
 						"type": "string"
@@ -178,6 +185,7 @@
 				},
 				"required": [
 					"login",
+					"password",
 					"role",
 					"firstName",
 					"lastName",
@@ -636,7 +644,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/User"
+									"items": {
+										"$ref": "#/components/schemas/UserDto"
+									},
+									"type": "array"
 								}
 							}
 						}
@@ -645,20 +656,40 @@
 				"tags": [
 					"user"
 				],
-				"security": [],
+				"security": [
+					{
+						"barearAuth": [
+							"admin",
+							"worker"
+						]
+					}
+				],
 				"parameters": []
 			},
 			"post": {
 				"operationId": "CreateUser",
 				"responses": {
-					"204": {
-						"description": "No content"
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Token"
+								}
+							}
+						}
 					}
 				},
 				"tags": [
 					"user"
 				],
-				"security": [],
+				"security": [
+					{
+						"barearAuth": [
+							"admin"
+						]
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -681,7 +712,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/User"
+									"$ref": "#/components/schemas/UserDto"
 								}
 							}
 						}
@@ -690,7 +721,14 @@
 				"tags": [
 					"user"
 				],
-				"security": [],
+				"security": [
+					{
+						"barearAuth": [
+							"admin",
+							"worker"
+						]
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -704,6 +742,35 @@
 				]
 			}
 		},
+		"/users/get/me": {
+			"get": {
+				"operationId": "GetMyUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"user"
+				],
+				"security": [
+					{
+						"barearAuth": [
+							"admin",
+							"worker"
+						]
+					}
+				],
+				"parameters": []
+			}
+		},
 		"/users/login": {
 			"post": {
 				"operationId": "Login",
@@ -713,7 +780,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/Tokens"
+									"$ref": "#/components/schemas/Token"
 								}
 							}
 						}
@@ -745,7 +812,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/Tokens"
+									"$ref": "#/components/schemas/Token"
 								}
 							}
 						}
