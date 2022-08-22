@@ -61,6 +61,7 @@ const models = {
             "lastName": { "dataType": "string", "required": true },
             "email": { "dataType": "string", "required": true },
             "phoneNumber": { "dataType": "string", "required": true },
+            "activated": { "dataType": "boolean", "required": true },
         },
         "additionalProperties": false,
     },
@@ -69,6 +70,19 @@ const models = {
         "dataType": "refObject",
         "properties": {
             "accessToken": { "dataType": "string", "required": true },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UpdateUserDto": {
+        "dataType": "refObject",
+        "properties": {
+            "login": { "dataType": "string", "required": true },
+            "password": { "dataType": "string", "required": true },
+            "firstName": { "dataType": "string", "required": true },
+            "lastName": { "dataType": "string", "required": true },
+            "email": { "dataType": "string", "required": true },
+            "phoneNumber": { "dataType": "string", "required": true },
         },
         "additionalProperties": false,
     },
@@ -376,7 +390,7 @@ function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/users/get/me', authenticateMiddleware([{ "barearAuth": ["admin", "worker"] }]), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController)), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController.prototype.getMyUser)), function UsersController_getMyUser(request, response, next) {
+    app.get('/users/get/me', authenticateMiddleware([{ "barearAuth": ["client"] }]), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController)), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController.prototype.getMyUser)), function UsersController_getMyUser(request, response, next) {
         const args = {
             request: { "in": "request", "name": "request", "required": true, "dataType": "object" },
         };
@@ -386,6 +400,41 @@ function RegisterRoutes(app) {
             validatedArgs = getValidatedArgs(args, request, response);
             const controller = new usersController_1.UsersController();
             const promise = controller.getMyUser.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, undefined, next);
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.put('/users/get/me', authenticateMiddleware([{ "barearAuth": ["client"] }]), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController)), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController.prototype.updateMyUser)), function UsersController_updateMyUser(request, response, next) {
+        const args = {
+            body: { "in": "body", "name": "body", "required": true, "ref": "UpdateUserDto" },
+            request: { "in": "request", "name": "request", "required": true, "dataType": "object" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request, response);
+            const controller = new usersController_1.UsersController();
+            const promise = controller.updateMyUser.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, undefined, next);
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.delete('/users/get/me', authenticateMiddleware([{ "barearAuth": ["client"] }]), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController)), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController.prototype.deleteMyUser)), function UsersController_deleteMyUser(request, response, next) {
+        const args = {
+            request: { "in": "request", "name": "request", "required": true, "dataType": "object" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request, response);
+            const controller = new usersController_1.UsersController();
+            const promise = controller.deleteMyUser.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, undefined, next);
         }
         catch (err) {
@@ -444,9 +493,44 @@ function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/users/logout', ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController)), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController.prototype.logOut)), function UsersController_logOut(request, response, next) {
+    app.delete('/users/:userId', authenticateMiddleware([{ "barearAuth": ["admin", "worker"] }]), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController)), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController.prototype.deleteconcreteUser)), function UsersController_deleteconcreteUser(request, response, next) {
         const args = {
-            authorization: { "in": "header", "name": "authorization", "required": true, "dataType": "string" },
+            userId: { "in": "path", "name": "userId", "required": true, "dataType": "double" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request, response);
+            const controller = new usersController_1.UsersController();
+            const promise = controller.deleteconcreteUser.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, undefined, next);
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.put('/users/:userId', authenticateMiddleware([{ "barearAuth": ["admin", "worker"] }]), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController)), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController.prototype.updateConcreteUser)), function UsersController_updateConcreteUser(request, response, next) {
+        const args = {
+            body: { "in": "body", "name": "body", "required": true, "ref": "UpdateUserDto" },
+            userId: { "in": "path", "name": "userId", "required": true, "dataType": "double" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request, response);
+            const controller = new usersController_1.UsersController();
+            const promise = controller.updateConcreteUser.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, undefined, next);
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.post('/users/logout', authenticateMiddleware([{ "barearAuth": ["admin", "worker", "client"] }]), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController)), ...((0, runtime_1.fetchMiddlewares)(usersController_1.UsersController.prototype.logOut)), function UsersController_logOut(request, response, next) {
+        const args = {
+            request: { "in": "request", "name": "request", "required": true, "dataType": "object" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];

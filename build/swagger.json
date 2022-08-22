@@ -111,6 +111,9 @@
                     },
                     "phoneNumber": {
                         "type": "string"
+                    },
+                    "activated": {
+                        "type": "boolean"
                     }
                 },
                 "required": [
@@ -118,7 +121,8 @@
                     "firstName",
                     "lastName",
                     "email",
-                    "phoneNumber"
+                    "phoneNumber",
+                    "activated"
                 ],
                 "type": "object",
                 "additionalProperties": false
@@ -131,6 +135,38 @@
                 },
                 "required": [
                     "accessToken"
+                ],
+                "type": "object",
+                "additionalProperties": false
+            },
+            "UpdateUserDto": {
+                "properties": {
+                    "login": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "phoneNumber": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "login",
+                    "password",
+                    "firstName",
+                    "lastName",
+                    "email",
+                    "phoneNumber"
                 ],
                 "type": "object",
                 "additionalProperties": false
@@ -674,7 +710,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Token"
+                                    "type": "string"
                                 }
                             }
                         }
@@ -740,6 +776,83 @@
                         }
                     }
                 ]
+            },
+            "delete": {
+                "operationId": "DeleteconcreteUser",
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    }
+                },
+                "tags": [
+                    "user"
+                ],
+                "security": [
+                    {
+                        "barearAuth": [
+                            "admin",
+                            "worker"
+                        ]
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "userId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            },
+            "put": {
+                "operationId": "UpdateConcreteUser",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Token"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "user"
+                ],
+                "security": [
+                    {
+                        "barearAuth": [
+                            "admin",
+                            "worker"
+                        ]
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "userId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateUserDto"
+                            }
+                        }
+                    }
+                }
             }
         },
         "/users/get/me": {
@@ -763,8 +876,62 @@
                 "security": [
                     {
                         "barearAuth": [
-                            "admin",
-                            "worker"
+                            "client"
+                        ]
+                    }
+                ],
+                "parameters": []
+            },
+            "put": {
+                "operationId": "UpdateMyUser",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Token"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "user"
+                ],
+                "security": [
+                    {
+                        "barearAuth": [
+                            "client"
+                        ]
+                    }
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateUserDto"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "DeleteMyUser",
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    }
+                },
+                "tags": [
+                    "user"
+                ],
+                "security": [
+                    {
+                        "barearAuth": [
+                            "client"
                         ]
                     }
                 ],
@@ -845,17 +1012,16 @@
                 "tags": [
                     "user"
                 ],
-                "security": [],
-                "parameters": [
+                "security": [
                     {
-                        "in": "header",
-                        "name": "authorization",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "barearAuth": [
+                            "admin",
+                            "worker",
+                            "client"
+                        ]
                     }
-                ]
+                ],
+                "parameters": []
             }
         }
     },

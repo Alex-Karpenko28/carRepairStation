@@ -41,10 +41,16 @@ export class Order {
   @OneToMany(() => Detail, (detail) => detail.order)
   details: Detail[];
 
-  @ManyToOne(() => User, (worker) => worker.id)
+  @ManyToOne(() => User, (worker) => worker.id,{
+    onDelete: 'CASCADE',
+    orphanedRowAction: "delete" // NEW
+  })
   worker: User;
 
-  @ManyToOne(() => User, (client) => client.id)
+  @ManyToOne(() => User, (client) => client.id,{
+    onDelete: 'CASCADE',
+    orphanedRowAction: "delete" // NEW
+  })
   client: User;
 }
 

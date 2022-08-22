@@ -26,6 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.expressAuthentication = void 0;
 const jwt = __importStar(require("jsonwebtoken"));
 require("dotenv/config");
+const user_1 = require("./entity/user");
+const data_source_1 = require("./data-source");
 const verifyJWT = async (token) => new Promise((resolve, reject) => {
     jwt.verify(token, process.env.SECRET_KEY, (err, data) => {
         if (err) {
@@ -34,6 +36,7 @@ const verifyJWT = async (token) => new Promise((resolve, reject) => {
         return resolve(data);
     });
 });
+const userRepository = data_source_1.AppDataSource.getRepository(user_1.User);
 async function expressAuthentication(request, securityName, roles // admin worker client
 ) {
     if (securityName !== "barearAuth")
@@ -46,6 +49,12 @@ async function expressAuthentication(request, securityName, roles // admin worke
     const role = payload.role;
     if (!roles.includes(role)) {
         throw new Error("Forbidden! User is not authorized");
+    }
+    const user = await userRepository.findOneBy({
+        id: payload.id
+    });
+    if (payload.tokenSalt != user.tokenSalt) {
+        throw new Error("Not Authorized");
     }
     request.context = { userId: payload.id };
 }

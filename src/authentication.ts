@@ -2,6 +2,8 @@ import type { ExtendedRequest} from './shared/extendedRequest'
 import * as jwt from "jsonwebtoken";
 import { JWTPayload } from "./user/userDto";
 import "dotenv/config";
+import { User } from "./entity/user";
+import { AppDataSource } from "./data-source";
 
 const verifyJWT = async (token: string): Promise<JWTPayload> =>
   new Promise((resolve, reject) => {
@@ -12,6 +14,8 @@ const verifyJWT = async (token: string): Promise<JWTPayload> =>
       return resolve(data as JWTPayload);
     });
   });
+
+  const userRepository = AppDataSource.getRepository(User);
 
 export async function expressAuthentication(
   request: ExtendedRequest,
@@ -28,6 +32,14 @@ export async function expressAuthentication(
 
   if (!roles.includes(role)) {
     throw new Error("Forbidden! User is not authorized");
+  }
+
+  const user = await userRepository.findOneBy({
+    id: payload.id
+  });
+
+  if (payload.tokenSalt != user.tokenSalt) {
+    throw new Error("Not Authorized");
   }
 
   request.context = { userId: payload.id }

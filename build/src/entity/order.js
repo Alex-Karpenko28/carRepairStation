@@ -51,11 +51,17 @@ __decorate([
     __metadata("design:type", Array)
 ], Order.prototype, "details", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_1.User, (worker) => worker.id),
+    (0, typeorm_1.ManyToOne)(() => user_1.User, (worker) => worker.id, {
+        onDelete: 'CASCADE',
+        orphanedRowAction: "delete" // NEW
+    }),
     __metadata("design:type", user_1.User)
 ], Order.prototype, "worker", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_1.User, (client) => client.id),
+    (0, typeorm_1.ManyToOne)(() => user_1.User, (client) => client.id, {
+        onDelete: 'CASCADE',
+        orphanedRowAction: "delete" // NEW
+    }),
     __metadata("design:type", user_1.User)
 ], Order.prototype, "client", void 0);
 Order = __decorate([

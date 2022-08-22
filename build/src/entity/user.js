@@ -49,6 +49,18 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Number)
+], User.prototype, "tokenSalt", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], User.prototype, "activationLink", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], User.prototype, "activated", void 0);
+__decorate([
     (0, typeorm_1.Column)(),
     (0, typeorm_1.Index)("idx_phonenumber"),
     __metadata("design:type", String)
@@ -62,15 +74,24 @@ __decorate([
     __metadata("design:type", Date)
 ], User.prototype, "updatedAt", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => orderPayment_1.OrderPayment, (orderPayment) => orderPayment.client),
+    (0, typeorm_1.OneToMany)(() => orderPayment_1.OrderPayment, (orderPayment) => orderPayment.client, {
+        onDelete: 'CASCADE',
+        orphanedRowAction: "delete" // NEW
+    }),
     __metadata("design:type", Array)
 ], User.prototype, "orderPayments", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => order_1.Order, (order) => order.worker),
+    (0, typeorm_1.OneToMany)(() => order_1.Order, (order) => order.worker, {
+        onDelete: 'CASCADE',
+        orphanedRowAction: "delete" // NEW
+    }),
     __metadata("design:type", Array)
 ], User.prototype, "orders", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => order_1.Order, (order) => order.client),
+    (0, typeorm_1.OneToMany)(() => order_1.Order, (order) => order.client, {
+        onDelete: 'CASCADE',
+        orphanedRowAction: "delete" // NEW
+    }),
     __metadata("design:type", Array)
 ], User.prototype, "orderss", void 0);
 User = __decorate([

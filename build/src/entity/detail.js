@@ -35,7 +35,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Detail.prototype, "avalabilityInWarehouse", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "numeric", precision: 10, scale: 3 }),
+    (0, typeorm_1.Column)({ type: "numeric", precision: 15, scale: 5 }),
     __metadata("design:type", Number)
 ], Detail.prototype, "detailPrice", void 0);
 __decorate([
@@ -47,7 +47,10 @@ __decorate([
     __metadata("design:type", Date)
 ], Detail.prototype, "updatedAt", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => order_1.Order, (order) => order.id),
+    (0, typeorm_1.ManyToOne)(() => order_1.Order, (order) => order.id, {
+        onDelete: 'CASCADE',
+        orphanedRowAction: "delete" // NEW
+    }),
     __metadata("design:type", order_1.Order)
 ], Detail.prototype, "order", void 0);
 Detail = __decorate([

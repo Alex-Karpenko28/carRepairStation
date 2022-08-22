@@ -40,12 +40,18 @@ __decorate([
     __metadata("design:type", Date)
 ], OrderPayment.prototype, "updatedAt", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => order_1.Order),
+    (0, typeorm_1.OneToOne)(() => order_1.Order, {
+        onDelete: 'CASCADE',
+        orphanedRowAction: "delete" // NEW
+    }),
     (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", order_1.Order)
 ], OrderPayment.prototype, "order", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_1.User, (client) => client.id),
+    (0, typeorm_1.ManyToOne)(() => user_1.User, (client) => client.id, {
+        onDelete: 'CASCADE',
+        orphanedRowAction: "delete" // NEW
+    }),
     __metadata("design:type", user_1.User)
 ], OrderPayment.prototype, "client", void 0);
 OrderPayment = __decorate([

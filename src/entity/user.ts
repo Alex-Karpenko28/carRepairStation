@@ -10,8 +10,7 @@ import {
 } from "typeorm";
 import { OrderPayment } from "./orderPayment";
 import { Order } from "./order";
-import { UserRole } from "../user/userDto"
-
+import { UserRole } from "../user/userDto";
 
 @Entity("user")
 @Unique(["login", "email"])
@@ -41,6 +40,15 @@ export class User {
   @Column()
   email: string;
 
+  @Column({ nullable: true })
+  tokenSalt: number;
+
+  @Column({ nullable: true })
+  activationLink: string;
+
+  @Column({ default: false })
+  activated: boolean;
+
   @Column()
   @Index("idx_phonenumber")
   phoneNumber: string;
@@ -51,12 +59,21 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => OrderPayment, (orderPayment) => orderPayment.client)
+  @OneToMany(() => OrderPayment, (orderPayment) => orderPayment.client, {
+    onDelete: 'CASCADE',
+    orphanedRowAction: "delete" // NEW
+  })
   orderPayments: OrderPayment[];
 
-  @OneToMany(() => Order, (order) => order.worker)
+  @OneToMany(() => Order, (order) => order.worker, {
+    onDelete: 'CASCADE',
+    orphanedRowAction: "delete" // NEW
+  })
   orders: Order[];
 
-  @OneToMany(() => Order, (order) => order.client)
+  @OneToMany(() => Order, (order) => order.client, {
+    onDelete: 'CASCADE',
+    orphanedRowAction: "delete" // NEW
+  })
   orderss: Order[];
 }

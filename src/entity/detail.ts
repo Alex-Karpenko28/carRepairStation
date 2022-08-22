@@ -25,7 +25,7 @@ export class Detail {
   @Column({ default: false })
   avalabilityInWarehouse: boolean;
 
-  @Column({ type: "numeric", precision: 10, scale: 3 })
+  @Column({ type: "numeric", precision: 15, scale: 5 })
   detailPrice: number;
 
   @CreateDateColumn()
@@ -34,7 +34,10 @@ export class Detail {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => Order, (order) => order.id)
+  @ManyToOne(() => Order, (order) => order.id,{
+    onDelete: 'CASCADE',
+    orphanedRowAction: "delete" // NEW
+  })
   order: Order;
 }
 

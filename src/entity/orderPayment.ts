@@ -31,10 +31,16 @@ export class OrderPayment {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToOne(() => Order)
+  @OneToOne(() => Order, {
+    onDelete: 'CASCADE',
+    orphanedRowAction: "delete" // NEW
+  })
   @JoinColumn()
   order: Order;
 
-  @ManyToOne(() => User, (client) => client.id)
+  @ManyToOne(() => User, (client) => client.id, {
+    onDelete: 'CASCADE',
+    orphanedRowAction: "delete" // NEW
+  })
   client: User;
 }
