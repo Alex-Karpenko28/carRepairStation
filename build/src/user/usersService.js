@@ -30,12 +30,16 @@ require("dotenv/config");
 const jwt = __importStar(require("jsonwebtoken"));
 const bcrypt = __importStar(require("bcrypt"));
 const crypto = __importStar(require("crypto"));
-const uuid = __importStar(require("uuid"));
-const mail_servise_1 = require("../mail-servise");
+const mail_servise_1 = require("../shared/mail-servise");
+const ApiError_1 = require("../error/ApiError");
+const ApiErrorList_1 = require("../error/ApiErrorList");
+const http_status_codes_1 = require("http-status-codes");
+const SALT_RANGE_DOWN = 0;
+const SALT_RANGE_UP = 1000000;
 const userRepository = data_source_1.AppDataSource.getRepository(user_1.User);
 const comparePass = (password, hash) => bcrypt.compare(password, hash);
 const signJWT = async (data) => new Promise((resolve, reject) => {
-    jwt.sign(data, process.env.SECRET_KEY, { expiresIn: "12h" }, (err, res) => {
+    jwt.sign(data, process.env.SECRET_KEY, { expiresIn: process.env.TOKEN_LIFE }, (err, res) => {
         if (err) {
             return reject(err);
         }
@@ -43,20 +47,21 @@ const signJWT = async (data) => new Promise((resolve, reject) => {
     });
 });
 const random = async () => new Promise((resolve, reject) => {
-    const randomNumber = crypto.randomInt(0, 1000000);
-    return resolve(randomNumber);
+    crypto.randomInt(SALT_RANGE_DOWN, SALT_RANGE_UP, (err, value) => {
+        if (err) {
+            return reject(err);
+        }
+        return resolve(value);
+    });
 });
-const activationLinkGenerate = async () => new Promise((resolve, reject) => {
-    const link = uuid.v4();
-    return resolve(link);
-});
+const activationLinkGenerate = () => crypto.randomUUID();
 class UsersService {
     async get(id) {
         const user = await userRepository.findOneBy({
             id: id,
         });
         if (!user) {
-            throw new Error("User not found");
+            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.UserNotFound, http_status_codes_1.StatusCodes.BAD_REQUEST, "user not found");
         }
         const userInfo = {
             id: user.id,
@@ -73,14 +78,14 @@ class UsersService {
             login: loginDto.login,
         });
         if (!user) {
-            throw new Error("Wrong login");
+            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.WrongLogin, http_status_codes_1.StatusCodes.BAD_REQUEST, "wrong login");
         }
         if (user.activated == false) {
             throw new Error("Activate your account");
         }
         const authenticated = await comparePass(loginDto.password, user.password);
         if (!authenticated) {
-            throw new Error("Wrong password");
+            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.WrongPassword, http_status_codes_1.StatusCodes.BAD_REQUEST, "wrong password");
         }
         const numberRandom = await random();
         await userRepository
@@ -100,20 +105,20 @@ class UsersService {
     }
     async createNewUser(body) {
         if (!body.email || !body.password) {
-            throw new Error("Incorrect email or password");
+            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.IncEmaOrPass, http_status_codes_1.StatusCodes.BAD_REQUEST, "Incorrect email or password");
         }
         if (body.role != "admin" &&
             body.role != "worker" &&
             body.role != "client") {
-            throw new Error("Incorrect role entry");
+            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.IncorrectRolle, http_status_codes_1.StatusCodes.BAD_REQUEST, "Incorrect role entry");
         }
         const candidate = await userRepository.findOneBy({
             email: body.email,
         });
         if (candidate) {
-            throw new Error("User with this email already exists");
+            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.EmailExist, http_status_codes_1.StatusCodes.BAD_REQUEST, "User with this email already exists");
         }
-        const hashPassword = await bcrypt.hash(body.password, 5);
+        const hashPassword = await bcrypt.hash(body.password, process.env.SALT_ROUNDS);
         const activationLink = await activationLinkGenerate();
         const newUser = new user_1.User();
         newUser.login = body.login;
@@ -130,7 +135,6 @@ class UsersService {
         const user = await userRepository.findOneBy({
             login: body.login,
         });
-        return "User create";
     }
     async updateUser(body, id) {
         const userToUpdate = await userRepository.findOneBy({
@@ -142,16 +146,16 @@ class UsersService {
                 email: body.email,
             });
             if (candidate) {
-                throw new Error("User with this email already exists");
+                throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.EmailExist, http_status_codes_1.StatusCodes.BAD_REQUEST, "User with this email already exists");
             }
             const candidateLogin = await userRepository.findOneBy({
                 email: body.login,
             });
             if (candidateLogin) {
-                throw new Error("User with this login already exists");
+                throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.EmailLogin, http_status_codes_1.StatusCodes.BAD_REQUEST, "User with this login already exists");
             }
         }
-        const hashPassword = await bcrypt.hash(body.password, 5);
+        const hashPassword = await bcrypt.hash(body.password, process.env.SALT_ROUNDS);
         const numberRandom = await random();
         await userRepository.update(id, {
             login: body.login,
@@ -205,7 +209,7 @@ class UsersService {
             activationLink: link,
         });
         if (!user) {
-            throw new Error("Incorrect activation link");
+            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.IncorrectLink, http_status_codes_1.StatusCodes.BAD_REQUEST, "Incorrect activation link");
         }
         await userRepository
             .createQueryBuilder()

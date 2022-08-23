@@ -73,7 +73,7 @@ export class UsersController extends Controller {
 
   @Post()
   @Security("barearAuth", ["admin"])
-  public async createUser(@Body() body: CreateUserDto): Promise<string> {
+  public async createUser(@Body() body: CreateUserDto): Promise<void> {
     return new UsersService().createNewUser(body);
   }
 
