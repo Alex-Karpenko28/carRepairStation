@@ -1,13 +1,13 @@
 import type { ExtendedRequest} from './shared/extendedRequest'
 import * as jwt from "jsonwebtoken";
 import { JWTPayload } from "./user/userDto";
-import "dotenv/config";
 import { User } from "./entity/user";
 import { AppDataSource } from "./data-source";
+import  config from "./shared/config";
 
 const verifyJWT = async (token: string): Promise<JWTPayload> =>
   new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.SECRET_KEY, (err, data) => {
+    jwt.verify(token, config.get('token.secretKey'), (err, data) => {
       if (err) {
         return reject(err);
       }

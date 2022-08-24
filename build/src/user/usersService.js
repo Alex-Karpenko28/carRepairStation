@@ -22,6 +22,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const user_1 = require("../entity/user");
@@ -34,12 +37,13 @@ const mail_servise_1 = require("../shared/mail-servise");
 const ApiError_1 = require("../error/ApiError");
 const ApiErrorList_1 = require("../error/ApiErrorList");
 const http_status_codes_1 = require("http-status-codes");
+const config_1 = __importDefault(require("../shared/config"));
 const SALT_RANGE_DOWN = 0;
 const SALT_RANGE_UP = 1000000;
 const userRepository = data_source_1.AppDataSource.getRepository(user_1.User);
 const comparePass = (password, hash) => bcrypt.compare(password, hash);
 const signJWT = async (data) => new Promise((resolve, reject) => {
-    jwt.sign(data, process.env.SECRET_KEY, { expiresIn: process.env.TOKEN_LIFE }, (err, res) => {
+    jwt.sign(data, config_1.default.get("token.secretKey"), { expiresIn: config_1.default.get("token.life") }, (err, res) => {
         if (err) {
             return reject(err);
         }
@@ -118,7 +122,8 @@ class UsersService {
         if (candidate) {
             throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.EmailExist, http_status_codes_1.StatusCodes.BAD_REQUEST, "User with this email already exists");
         }
-        const hashPassword = await bcrypt.hash(body.password, process.env.SALT_ROUNDS);
+        console.log("conr123665");
+        const hashPassword = await bcrypt.hash(body.password, config_1.default.get("saltRounds"));
         const activationLink = await activationLinkGenerate();
         const newUser = new user_1.User();
         newUser.login = body.login;
@@ -130,7 +135,7 @@ class UsersService {
         newUser.activationLink = activationLink;
         newUser.email = body.email;
         newUser.phoneNumber = body.phoneNumber;
-        await new mail_servise_1.MailService().sendActivationMail(body.email, `${process.env.API_URL}/users/signup-by-link/${activationLink}`);
+        await new mail_servise_1.MailService().sendActivationMail(body.email, `${config_1.default.get("apiURL")}/users/signup-by-link/${activationLink}`);
         await userRepository.save(newUser);
         const user = await userRepository.findOneBy({
             login: body.login,
@@ -155,7 +160,7 @@ class UsersService {
                 throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.EmailLogin, http_status_codes_1.StatusCodes.BAD_REQUEST, "User with this login already exists");
             }
         }
-        const hashPassword = await bcrypt.hash(body.password, process.env.SALT_ROUNDS);
+        const hashPassword = await bcrypt.hash(body.password, config_1.default.get("saltRounds"));
         const numberRandom = await random();
         await userRepository.update(id, {
             login: body.login,

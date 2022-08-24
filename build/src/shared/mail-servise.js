@@ -4,31 +4,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MailService = void 0;
-require("dotenv/config");
 const nodemailer_1 = __importDefault(require("nodemailer"));
+const config_1 = __importDefault(require("./config"));
+const createLinkHtml = (link) => `
+<div>
+    <h1>To activate follow the link</h1>
+    <a href="${link}">${link}</a>
+</div>
+`;
 class MailService {
     async sendActivationMail(to, link) {
         const transporter = nodemailer_1.default.createTransport({
-            host: process.env.SMTP_HOST,
-            port: Number(process.env.SMTP_PORT),
+            host: config_1.default.get("smtp.host"),
+            port: config_1.default.get("smtp.port"),
             secure: true,
             auth: {
-                user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASSWORD,
+                user: config_1.default.get("smtp.user"),
+                pass: config_1.default.get("smtp.password"),
             },
             logger: true,
         });
         const result = await transporter.sendMail({
             from: process.env.SMTP_USER,
             to,
-            subject: "Account activation for " + process.env.API_URL,
+            subject: "Account activation for " + config_1.default.get("apiURL"),
             text: "",
-            html: `
-                  <div>
-                      <h1>To activate follow the link</h1>
-                      <a href="${link}">${link}</a>
-                  </div>
-              `,
+            html: createLinkHtml(link),
         });
     }
 }

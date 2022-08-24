@@ -3,7 +3,6 @@ import express, {
   Request as ExRequest,
   NextFunction,
 } from "express";
-import "dotenv/config";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import { RegisterRoutes } from "./routes";
@@ -12,10 +11,12 @@ import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "../swagger.json";
 import { ValidateError } from "tsoa";
 import { ApiError } from "./error/ApiError";
+import  config from "./shared/config";
 
 const app = express();
 
-const port = process.env.PORT || 3000;
+const port = config.get('port');
+
 
 app.use(helmet());
 
@@ -51,13 +52,11 @@ app.use(function errorHandler(
   }
 
   if (err instanceof ApiError) {
-    return res
-      .status((err as ApiError).statusCode)
-      .json({
-        "name": (err as ApiError).name,
-         "status": (err as ApiError).statusCode,
-        "message": (err as ApiError).message,
-      });
+    return res.status((err as ApiError).statusCode).json({
+      name: (err as ApiError).name,
+      status: (err as ApiError).statusCode,
+      message: (err as ApiError).message,
+    });
   }
 
   if (err instanceof Error) {

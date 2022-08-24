@@ -22,14 +22,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.expressAuthentication = void 0;
 const jwt = __importStar(require("jsonwebtoken"));
-require("dotenv/config");
 const user_1 = require("./entity/user");
 const data_source_1 = require("./data-source");
+const config_1 = __importDefault(require("./shared/config"));
 const verifyJWT = async (token) => new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.SECRET_KEY, (err, data) => {
+    jwt.verify(token, config_1.default.get('token.secretKey'), (err, data) => {
         if (err) {
             return reject(err);
         }

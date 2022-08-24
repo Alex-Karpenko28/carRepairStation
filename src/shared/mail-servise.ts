@@ -1,32 +1,32 @@
-import "dotenv/config";
 import nodemailer from "nodemailer";
+import config from "./config";
+
+const createLinkHtml = (link: string): string => `
+<div>
+    <h1>To activate follow the link</h1>
+    <a href="${link}">${link}</a>
+</div>
+`
 
 export class MailService {
-  public async sendActivationMail(to: string, link: string){
-    
-    const transporter =  nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT),
+  public async sendActivationMail(to: string, link: string) {
+    const transporter = nodemailer.createTransport({
+      host: config.get("smtp.host"),
+      port: config.get("smtp.port"),
       secure: true,
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
+        user: config.get("smtp.user"),
+        pass: config.get("smtp.password"),
       },
       logger: true,
     });
 
-     
     const result = await transporter.sendMail({
       from: process.env.SMTP_USER,
       to,
-      subject: "Account activation for " + process.env.API_URL,
+      subject: "Account activation for " + config.get("apiURL"),
       text: "",
-      html: `
-                  <div>
-                      <h1>To activate follow the link</h1>
-                      <a href="${link}">${link}</a>
-                  </div>
-              `,
+      html: createLinkHtml(link),
     });
   }
 }

@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-require("dotenv/config");
 const helmet_1 = __importDefault(require("helmet"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const routes_1 = require("./routes");
@@ -13,8 +12,9 @@ const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_json_1 = __importDefault(require("../swagger.json"));
 const tsoa_1 = require("tsoa");
 const ApiError_1 = require("./error/ApiError");
+const config_1 = __importDefault(require("./shared/config"));
 const app = (0, express_1.default)();
-const port = process.env.PORT || 3000;
+const port = config_1.default.get('port');
 app.use((0, helmet_1.default)());
 app.use(body_parser_1.default.urlencoded({
     extended: true,
@@ -36,12 +36,10 @@ app.use(function errorHandler(err, req, res, next) {
         });
     }
     if (err instanceof ApiError_1.ApiError) {
-        return res
-            .status(err.statusCode)
-            .json({
-            "name": err.name,
-            "status": err.statusCode,
-            "message": err.message,
+        return res.status(err.statusCode).json({
+            name: err.name,
+            status: err.statusCode,
+            message: err.message,
         });
     }
     if (err instanceof Error) {

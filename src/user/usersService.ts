@@ -16,6 +16,7 @@ import { MailService } from "../shared/mail-servise";
 import { ApiError } from "../error/ApiError";
 import { ErrorsList } from "../error/ApiErrorList";
 import { StatusCodes } from "http-status-codes";
+import config from "../shared/config";
 
 const SALT_RANGE_DOWN = 0;
 const SALT_RANGE_UP = 1000000;
@@ -29,8 +30,8 @@ const signJWT = async (data: JWTPayload): Promise<string> =>
   new Promise((resolve, reject) => {
     jwt.sign(
       data,
-      process.env.SECRET_KEY,
-      { expiresIn: process.env.TOKEN_LIFE },
+      config.get("token.secretKey"),
+      { expiresIn: config.get("token.life") },
       (err, res) => {
         if (err) {
           return reject(err);
@@ -129,7 +130,11 @@ export class UsersService {
       body.role != "worker" &&
       body.role != "client"
     ) {
-      throw new ApiError(ErrorsList.IncorrectRolle, StatusCodes.BAD_REQUEST, "Incorrect role entry");
+      throw new ApiError(
+        ErrorsList.IncorrectRolle,
+        StatusCodes.BAD_REQUEST,
+        "Incorrect role entry"
+      );
     }
 
     const candidate = await userRepository.findOneBy({
@@ -144,7 +149,13 @@ export class UsersService {
       );
     }
 
-    const hashPassword = await bcrypt.hash(body.password, process.env.SALT_ROUNDS);
+    console.log("conr123665");
+
+    const hashPassword = await bcrypt.hash(
+      body.password,
+      config.get("saltRounds")
+    );
+
     const activationLink = await activationLinkGenerate();
     const newUser = new User();
     newUser.login = body.login;
@@ -159,8 +170,9 @@ export class UsersService {
 
     await new MailService().sendActivationMail(
       body.email,
-      `${process.env.API_URL}/users/signup-by-link/${activationLink}`
+      `${config.get("apiURL")}/users/signup-by-link/${activationLink}`
     );
+
     await userRepository.save(newUser);
     const user = await userRepository.findOneBy({
       login: body.login,
@@ -199,7 +211,10 @@ export class UsersService {
         );
       }
     }
-    const hashPassword = await bcrypt.hash(body.password, process.env.SALT_ROUNDS);
+    const hashPassword = await bcrypt.hash(
+      body.password,
+      config.get("saltRounds")
+    );
     const numberRandom = await random();
     await userRepository.update(id, {
       login: body.login,
