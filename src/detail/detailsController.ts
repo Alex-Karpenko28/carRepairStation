@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Path, Post,Put, Delete, Route, Tags } from "tsoa";
-import { CreateDetailDto } from "./detail.dto";
+import { CreateDetailDto } from "./detailDto";
 
 @Tags("detail")
 @Route("/details")

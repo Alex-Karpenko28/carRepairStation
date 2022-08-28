@@ -9,17 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Order = exports.OrderStatus = void 0;
+exports.Order = void 0;
 const typeorm_1 = require("typeorm");
 const detail_1 = require("./detail");
 const user_1 = require("./user");
-var OrderStatus;
-(function (OrderStatus) {
-    OrderStatus["DIAGNOSTIC"] = "diagnostic";
-    OrderStatus["OrderingSpareParts"] = "ordering spare parts";
-    OrderStatus["REPAIR"] = "repair";
-    OrderStatus["READY"] = "ready";
-})(OrderStatus = exports.OrderStatus || (exports.OrderStatus = {}));
+const orderDto_1 = require("../order/orderDto");
 let Order = class Order {
 };
 __decorate([
@@ -29,8 +23,8 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({
         type: "enum",
-        enum: OrderStatus,
-        default: OrderStatus.DIAGNOSTIC,
+        enum: orderDto_1.OrderStatus,
+        default: orderDto_1.OrderStatus.DIAGNOSTIC,
     }),
     __metadata("design:type", String)
 ], Order.prototype, "orderStatus", void 0);
@@ -51,19 +45,21 @@ __decorate([
     __metadata("design:type", Array)
 ], Order.prototype, "details", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_1.User, (worker) => worker.id, {
+    (0, typeorm_1.ManyToOne)(() => user_1.User, (worker) => worker.orders, {
         onDelete: 'CASCADE',
-        orphanedRowAction: "delete" // NEW
+        orphanedRowAction: "delete"
     }),
-    __metadata("design:type", user_1.User)
-], Order.prototype, "worker", void 0);
+    (0, typeorm_1.JoinColumn)({ name: 'workerId' }),
+    __metadata("design:type", Number)
+], Order.prototype, "workerId", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_1.User, (client) => client.id, {
+    (0, typeorm_1.ManyToOne)(() => user_1.User, (client) => client.orderss, {
         onDelete: 'CASCADE',
-        orphanedRowAction: "delete" // NEW
+        orphanedRowAction: "delete"
     }),
-    __metadata("design:type", user_1.User)
-], Order.prototype, "client", void 0);
+    (0, typeorm_1.JoinColumn)({ name: 'clientId' }),
+    __metadata("design:type", Number)
+], Order.prototype, "clientId", void 0);
 Order = __decorate([
     (0, typeorm_1.Entity)("order")
 ], Order);

@@ -52,30 +52,30 @@ let UsersController = class UsersController extends tsoa_1.Controller {
 };
 __decorate([
     (0, tsoa_1.Get)(),
-    (0, tsoa_1.Security)("barearAuth", ["admin", "worker"]),
+    (0, tsoa_1.Security)('barearAuth', ['admin', 'worker']),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getAllUser", null);
 __decorate([
-    (0, tsoa_1.Get)("/{userId}"),
-    (0, tsoa_1.Security)("barearAuth", ["admin", "worker"]),
+    (0, tsoa_1.Get)('/{userId}'),
+    (0, tsoa_1.Security)('barearAuth', ['admin', 'worker']),
     __param(0, (0, tsoa_1.Path)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUser", null);
 __decorate([
-    (0, tsoa_1.Get)("/get/me"),
-    (0, tsoa_1.Security)("barearAuth", ["client"]),
+    (0, tsoa_1.Get)('/get/me'),
+    (0, tsoa_1.Security)('barearAuth', ['client']),
     __param(0, (0, tsoa_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getMyUser", null);
 __decorate([
-    (0, tsoa_1.Put)("/get/me"),
-    (0, tsoa_1.Security)("barearAuth", ["client"]),
+    (0, tsoa_1.Put)('/get/me'),
+    (0, tsoa_1.Security)('barearAuth', ['client']),
     __param(0, (0, tsoa_1.Body)()),
     __param(1, (0, tsoa_1.Request)()),
     __metadata("design:type", Function),
@@ -83,22 +83,22 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "updateMyUser", null);
 __decorate([
-    (0, tsoa_1.Delete)("/get/me"),
-    (0, tsoa_1.Security)("barearAuth", ["client"]),
+    (0, tsoa_1.Delete)('/get/me'),
+    (0, tsoa_1.Security)('barearAuth', ['client']),
     __param(0, (0, tsoa_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "deleteMyUser", null);
 __decorate([
-    (0, tsoa_1.Post)("/login"),
+    (0, tsoa_1.Post)('/login'),
     __param(0, (0, tsoa_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "login", null);
 __decorate([
-    (0, tsoa_1.Get)("/signup-by-link/{link}"),
+    (0, tsoa_1.Get)('/signup-by-link/{link}'),
     __param(0, (0, tsoa_1.Path)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -106,23 +106,23 @@ __decorate([
 ], UsersController.prototype, "signUpByLink", null);
 __decorate([
     (0, tsoa_1.Post)(),
-    (0, tsoa_1.Security)("barearAuth", ["admin"]),
+    (0, tsoa_1.Security)('barearAuth', ['admin']),
     __param(0, (0, tsoa_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "createUser", null);
 __decorate([
-    (0, tsoa_1.Delete)("/{userId}"),
-    (0, tsoa_1.Security)("barearAuth", ["admin", "worker"]),
+    (0, tsoa_1.Delete)('/{userId}'),
+    (0, tsoa_1.Security)('barearAuth', ['admin', 'worker']),
     __param(0, (0, tsoa_1.Path)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "deleteconcreteUser", null);
 __decorate([
-    (0, tsoa_1.Put)("/{userId}"),
-    (0, tsoa_1.Security)("barearAuth", ["admin", "worker"]),
+    (0, tsoa_1.Put)('/{userId}'),
+    (0, tsoa_1.Security)('barearAuth', ['admin', 'worker']),
     __param(0, (0, tsoa_1.Body)()),
     __param(1, (0, tsoa_1.Path)()),
     __metadata("design:type", Function),
@@ -130,16 +130,16 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "updateConcreteUser", null);
 __decorate([
-    (0, tsoa_1.Post)("/logout"),
-    (0, tsoa_1.Security)("barearAuth", ["admin", "worker", "client"]),
+    (0, tsoa_1.Post)('/logout'),
+    (0, tsoa_1.Security)('barearAuth', ['admin', 'worker', 'client']),
     __param(0, (0, tsoa_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "logOut", null);
 UsersController = __decorate([
-    (0, tsoa_1.Tags)("user"),
-    (0, tsoa_1.Route)("/users")
+    (0, tsoa_1.Tags)('user'),
+    (0, tsoa_1.Route)('/users')
 ], UsersController);
 exports.UsersController = UsersController;
 //# sourceMappingURL=usersController.js.map

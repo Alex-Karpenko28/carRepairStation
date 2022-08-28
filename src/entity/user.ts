@@ -61,19 +61,19 @@ export class User {
 
   @OneToMany(() => OrderPayment, (orderPayment) => orderPayment.client, {
     onDelete: 'CASCADE',
-    orphanedRowAction: "delete" // NEW
+    orphanedRowAction: "delete" 
   })
   orderPayments: OrderPayment[];
 
-  @OneToMany(() => Order, (order) => order.worker, {
+  @OneToMany(() => Order, (order) => order.workerId, {
     onDelete: 'CASCADE',
-    orphanedRowAction: "delete" // NEW
+    orphanedRowAction: "delete" 
   })
   orders: Order[];
 
-  @OneToMany(() => Order, (order) => order.client, {
+  @OneToMany(() => Order, (order) => order.clientId, {
     onDelete: 'CASCADE',
-    orphanedRowAction: "delete" // NEW
+    orphanedRowAction: "delete" 
   })
   orderss: Order[];
 }

@@ -6,16 +6,12 @@ import {
   UpdateDateColumn,
   OneToMany,
   ManyToOne,
+  JoinColumn
 } from "typeorm";
 import { Detail } from "./detail";
 import { User } from "./user";
+import { OrderStatus } from "../order/orderDto"
 
-export enum OrderStatus {
-  DIAGNOSTIC = "diagnostic",
-  OrderingSpareParts = "ordering spare parts",
-  REPAIR = "repair",
-  READY = "ready",
-}
 
 @Entity("order")
 export class Order {
@@ -41,16 +37,18 @@ export class Order {
   @OneToMany(() => Detail, (detail) => detail.order)
   details: Detail[];
 
-  @ManyToOne(() => User, (worker) => worker.id,{
+  @ManyToOne(() => User, (worker) => worker.orders,{
     onDelete: 'CASCADE',
-    orphanedRowAction: "delete" // NEW
+    orphanedRowAction: "delete" 
   })
-  worker: User;
+  @JoinColumn({ name: 'workerId' })
+  workerId: number;
 
-  @ManyToOne(() => User, (client) => client.id,{
+  @ManyToOne(() => User, (client) => client.orderss,{
     onDelete: 'CASCADE',
-    orphanedRowAction: "delete" // NEW
+    orphanedRowAction: "delete"
   })
-  client: User;
+  @JoinColumn({ name: 'clientId' })
+  clientId: number;
 }
 

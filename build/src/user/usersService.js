@@ -29,7 +29,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const user_1 = require("../entity/user");
 const data_source_1 = require("../data-source");
-require("dotenv/config");
 const jwt = __importStar(require("jsonwebtoken"));
 const bcrypt = __importStar(require("bcrypt"));
 const crypto = __importStar(require("crypto"));
@@ -43,7 +42,7 @@ const SALT_RANGE_UP = 1000000;
 const userRepository = data_source_1.AppDataSource.getRepository(user_1.User);
 const comparePass = (password, hash) => bcrypt.compare(password, hash);
 const signJWT = async (data) => new Promise((resolve, reject) => {
-    jwt.sign(data, config_1.default.get("token.secretKey"), { expiresIn: config_1.default.get("token.life") }, (err, res) => {
+    jwt.sign(data, config_1.default.get('token.secretKey'), { expiresIn: config_1.default.get('token.life') }, (err, res) => {
         if (err) {
             return reject(err);
         }
@@ -65,7 +64,7 @@ class UsersService {
             id: id,
         });
         if (!user) {
-            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.UserNotFound, http_status_codes_1.StatusCodes.BAD_REQUEST, "user not found");
+            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.UserNotFound, http_status_codes_1.StatusCodes.BAD_REQUEST, 'user not found');
         }
         const userInfo = {
             id: user.id,
@@ -82,21 +81,21 @@ class UsersService {
             login: loginDto.login,
         });
         if (!user) {
-            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.WrongLogin, http_status_codes_1.StatusCodes.BAD_REQUEST, "wrong login");
+            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.WrongLogin, http_status_codes_1.StatusCodes.BAD_REQUEST, 'wrong login');
         }
         if (user.activated == false) {
-            throw new Error("Activate your account");
+            throw new Error('Activate your account');
         }
         const authenticated = await comparePass(loginDto.password, user.password);
         if (!authenticated) {
-            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.WrongPassword, http_status_codes_1.StatusCodes.BAD_REQUEST, "wrong password");
+            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.WrongPassword, http_status_codes_1.StatusCodes.BAD_REQUEST, 'wrong password');
         }
         const numberRandom = await random();
         await userRepository
             .createQueryBuilder()
             .update(user_1.User)
             .set({ tokenSalt: numberRandom })
-            .where("id = :id", { id: user.id })
+            .where('id = :id', { id: user.id })
             .execute();
         const payload = {
             id: user.id,
@@ -109,21 +108,20 @@ class UsersService {
     }
     async createNewUser(body) {
         if (!body.email || !body.password) {
-            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.IncEmaOrPass, http_status_codes_1.StatusCodes.BAD_REQUEST, "Incorrect email or password");
+            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.IncEmaOrPass, http_status_codes_1.StatusCodes.BAD_REQUEST, 'Incorrect email or password');
         }
-        if (body.role != "admin" &&
-            body.role != "worker" &&
-            body.role != "client") {
-            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.IncorrectRolle, http_status_codes_1.StatusCodes.BAD_REQUEST, "Incorrect role entry");
+        if (body.role != 'admin' &&
+            body.role != 'worker' &&
+            body.role != 'client') {
+            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.IncorrectRolle, http_status_codes_1.StatusCodes.BAD_REQUEST, 'Incorrect role entry');
         }
         const candidate = await userRepository.findOneBy({
             email: body.email,
         });
         if (candidate) {
-            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.EmailExist, http_status_codes_1.StatusCodes.BAD_REQUEST, "User with this email already exists");
+            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.EmailExist, http_status_codes_1.StatusCodes.BAD_REQUEST, 'User with this email already exists');
         }
-        console.log("conr123665");
-        const hashPassword = await bcrypt.hash(body.password, config_1.default.get("saltRounds"));
+        const hashPassword = await bcrypt.hash(body.password, config_1.default.get('saltRounds'));
         const activationLink = await activationLinkGenerate();
         const newUser = new user_1.User();
         newUser.login = body.login;
@@ -135,11 +133,8 @@ class UsersService {
         newUser.activationLink = activationLink;
         newUser.email = body.email;
         newUser.phoneNumber = body.phoneNumber;
-        await new mail_servise_1.MailService().sendActivationMail(body.email, `${config_1.default.get("apiURL")}/users/signup-by-link/${activationLink}`);
+        await new mail_servise_1.MailService().sendActivationMail(body.email, `${config_1.default.get('apiURL')}/users/signup-by-link/${activationLink}`);
         await userRepository.save(newUser);
-        const user = await userRepository.findOneBy({
-            login: body.login,
-        });
     }
     async updateUser(body, id) {
         const userToUpdate = await userRepository.findOneBy({
@@ -151,16 +146,16 @@ class UsersService {
                 email: body.email,
             });
             if (candidate) {
-                throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.EmailExist, http_status_codes_1.StatusCodes.BAD_REQUEST, "User with this email already exists");
+                throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.EmailExist, http_status_codes_1.StatusCodes.BAD_REQUEST, 'User with this email already exists');
             }
             const candidateLogin = await userRepository.findOneBy({
                 email: body.login,
             });
             if (candidateLogin) {
-                throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.EmailLogin, http_status_codes_1.StatusCodes.BAD_REQUEST, "User with this login already exists");
+                throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.EmailLogin, http_status_codes_1.StatusCodes.BAD_REQUEST, 'User with this login already exists');
             }
         }
-        const hashPassword = await bcrypt.hash(body.password, config_1.default.get("saltRounds"));
+        const hashPassword = await bcrypt.hash(body.password, config_1.default.get('saltRounds'));
         const numberRandom = await random();
         await userRepository.update(id, {
             login: body.login,
@@ -182,13 +177,13 @@ class UsersService {
     }
     async getAllUsers() {
         const users = await userRepository
-            .createQueryBuilder("user")
+            .createQueryBuilder('user')
             .select([
-            "user.id",
-            "user.firstName",
-            "user.lastName",
-            "user.email",
-            "user.phoneNumber",
+            'user.id',
+            'user.firstName',
+            'user.lastName',
+            'user.email',
+            'user.phoneNumber',
         ])
             .getMany();
         return users;
@@ -198,7 +193,7 @@ class UsersService {
             .createQueryBuilder()
             .update(user_1.User)
             .set({ tokenSalt: -1 })
-            .where("id = :id", { id: id })
+            .where('id = :id', { id: id })
             .execute();
     }
     async deleteUser(id) {
@@ -206,7 +201,7 @@ class UsersService {
             .createQueryBuilder()
             .delete()
             .from(user_1.User)
-            .where("id = :id", { id: id })
+            .where('id = :id', { id: id })
             .execute();
     }
     async sign_UpByLink(link) {
@@ -214,13 +209,13 @@ class UsersService {
             activationLink: link,
         });
         if (!user) {
-            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.IncorrectLink, http_status_codes_1.StatusCodes.BAD_REQUEST, "Incorrect activation link");
+            throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.IncorrectLink, http_status_codes_1.StatusCodes.BAD_REQUEST, 'Incorrect activation link');
         }
         await userRepository
             .createQueryBuilder()
             .update(user_1.User)
             .set({ activated: true, activationLink: null })
-            .where("id = :id", { id: user.id })
+            .where('id = :id', { id: user.id })
             .execute();
         const payload = {
             id: user.id,

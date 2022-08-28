@@ -11,5 +11,7 @@ var ErrorsList;
     ErrorsList["EmailExist"] = "User With This Email Already Exists";
     ErrorsList["EmailLogin"] = "User with this login already exists";
     ErrorsList["IncorrectLink"] = "IncorrectActivationLink";
+    ErrorsList["WrongId"] = "ClientId or workerId is missing from table user";
+    ErrorsList["OrderNotFound"] = "Order not found";
 })(ErrorsList = exports.ErrorsList || (exports.ErrorsList = {}));
 //# sourceMappingURL=ApiErrorList.js.map

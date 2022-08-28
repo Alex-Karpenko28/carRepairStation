@@ -36,6 +36,46 @@
                 "type": "object",
                 "additionalProperties": false
             },
+            "OrderDto": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "workerId": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "clientId": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "orderStatus": {
+                        "type": "string"
+                    },
+                    "orderDescription": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "workerId",
+                    "clientId",
+                    "orderStatus",
+                    "orderDescription"
+                ],
+                "type": "object",
+                "additionalProperties": false
+            },
+            "OrderStatus": {
+                "enum": [
+                    "diagnostic",
+                    "ordering spare parts",
+                    "repair",
+                    "ready"
+                ],
+                "type": "string"
+            },
             "CreateOrderDto": {
                 "properties": {
                     "workerId": {
@@ -47,7 +87,7 @@
                         "format": "double"
                     },
                     "orderStatus": {
-                        "type": "string"
+                        "$ref": "#/components/schemas/OrderStatus"
                     },
                     "orderDescription": {
                         "type": "string"
@@ -409,7 +449,10 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CreateOrderDto"
+                                    "items": {
+                                        "$ref": "#/components/schemas/OrderDto"
+                                    },
+                                    "type": "array"
                                 }
                             }
                         }
@@ -418,7 +461,14 @@
                 "tags": [
                     "order"
                 ],
-                "security": [],
+                "security": [
+                    {
+                        "barearAuth": [
+                            "admin",
+                            "worker"
+                        ]
+                    }
+                ],
                 "parameters": []
             },
             "post": {
@@ -429,7 +479,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CreateOrderDto"
+                                    "$ref": "#/components/schemas/OrderDto"
                                 }
                             }
                         }
@@ -438,7 +488,13 @@
                 "tags": [
                     "order"
                 ],
-                "security": [],
+                "security": [
+                    {
+                        "barearAuth": [
+                            "admin"
+                        ]
+                    }
+                ],
                 "parameters": [],
                 "requestBody": {
                     "required": true,
@@ -461,7 +517,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CreateOrderDto"
+                                    "$ref": "#/components/schemas/OrderDto"
                                 }
                             }
                         }
@@ -470,7 +526,15 @@
                 "tags": [
                     "order"
                 ],
-                "security": [],
+                "security": [
+                    {
+                        "barearAuth": [
+                            "admin",
+                            "worker",
+                            "client"
+                        ]
+                    }
+                ],
                 "parameters": [
                     {
                         "in": "path",
@@ -500,7 +564,14 @@
                 "tags": [
                     "order"
                 ],
-                "security": [],
+                "security": [
+                    {
+                        "barearAuth": [
+                            "admin",
+                            "worker"
+                        ]
+                    }
+                ],
                 "parameters": [
                     {
                         "in": "path",
@@ -533,7 +604,13 @@
                 "tags": [
                     "order"
                 ],
-                "security": [],
+                "security": [
+                    {
+                        "barearAuth": [
+                            "admin"
+                        ]
+                    }
+                ],
                 "parameters": [
                     {
                         "in": "path",

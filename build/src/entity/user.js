@@ -76,21 +76,21 @@ __decorate([
 __decorate([
     (0, typeorm_1.OneToMany)(() => orderPayment_1.OrderPayment, (orderPayment) => orderPayment.client, {
         onDelete: 'CASCADE',
-        orphanedRowAction: "delete" // NEW
+        orphanedRowAction: "delete"
     }),
     __metadata("design:type", Array)
 ], User.prototype, "orderPayments", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => order_1.Order, (order) => order.worker, {
+    (0, typeorm_1.OneToMany)(() => order_1.Order, (order) => order.workerId, {
         onDelete: 'CASCADE',
-        orphanedRowAction: "delete" // NEW
+        orphanedRowAction: "delete"
     }),
     __metadata("design:type", Array)
 ], User.prototype, "orders", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => order_1.Order, (order) => order.client, {
+    (0, typeorm_1.OneToMany)(() => order_1.Order, (order) => order.clientId, {
         onDelete: 'CASCADE',
-        orphanedRowAction: "delete" // NEW
+        orphanedRowAction: "delete"
     }),
     __metadata("design:type", Array)
 ], User.prototype, "orderss", void 0);

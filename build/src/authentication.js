@@ -42,22 +42,22 @@ const verifyJWT = async (token) => new Promise((resolve, reject) => {
 const userRepository = data_source_1.AppDataSource.getRepository(user_1.User);
 async function expressAuthentication(request, securityName, roles // admin worker client
 ) {
-    if (securityName !== "barearAuth")
+    if (securityName !== 'barearAuth')
         return undefined;
     const authorization = request.headers.authorization;
     if (!authorization) {
-        throw new Error("Not Authorized");
+        throw new Error('Not Authorized');
     }
     const payload = await verifyJWT(authorization);
     const role = payload.role;
     if (!roles.includes(role)) {
-        throw new Error("Forbidden! User is not authorized");
+        throw new Error('Forbidden! User is not authorized');
     }
     const user = await userRepository.findOneBy({
-        id: payload.id
+        id: payload.id,
     });
     if (payload.tokenSalt != user.tokenSalt) {
-        throw new Error("Not Authorized");
+        throw new Error('Not Authorized');
     }
     request.context = { userId: payload.id };
 }

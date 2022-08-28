@@ -15,20 +15,20 @@ const createLinkHtml = (link) => `
 class MailService {
     async sendActivationMail(to, link) {
         const transporter = nodemailer_1.default.createTransport({
-            host: config_1.default.get("smtp.host"),
-            port: config_1.default.get("smtp.port"),
+            host: config_1.default.get('smtp.host'),
+            port: config_1.default.get('smtp.port'),
             secure: true,
             auth: {
-                user: config_1.default.get("smtp.user"),
-                pass: config_1.default.get("smtp.password"),
+                user: config_1.default.get('smtp.user'),
+                pass: config_1.default.get('smtp.password'),
             },
             logger: true,
         });
-        const result = await transporter.sendMail({
+        await transporter.sendMail({
             from: process.env.SMTP_USER,
             to,
-            subject: "Account activation for " + config_1.default.get("apiURL"),
-            text: "",
+            subject: 'Account activation for ' + config_1.default.get('apiURL'),
+            text: '',
             html: createLinkHtml(link),
         });
     }

@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Path, Post, Put, Route, Tags } from "tsoa";
-import { CreateOrderPaymentDto } from "./orderPayment.dto";
+import { CreateOrderPaymentDto } from "./orderPaymentDto";
 
 
 @Tags("orderPayment")

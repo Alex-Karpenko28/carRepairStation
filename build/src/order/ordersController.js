@@ -14,31 +14,34 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrdersController = void 0;
 const tsoa_1 = require("tsoa");
+const orderServise_1 = require("./orderServise");
 let OrdersController = class OrdersController extends tsoa_1.Controller {
     async getAllOrders() {
-        return null;
+        return await new orderServise_1.OrderService().getAllOrders();
     }
     async getOrder(orderId) {
-        return null;
+        return await new orderServise_1.OrderService().getConcreteOrder(orderId);
     }
     async createOrder(body) {
-        return null;
+        return new orderServise_1.OrderService().createOrder(body);
     }
     async updateOrder(orderId, body) {
-        return null;
+        return new orderServise_1.OrderService().updateConreteOrder(body, orderId);
     }
     async deleteOrder(orderId) {
-        //return null;
+        new orderServise_1.OrderService().deleteConcreteOrder(orderId);
     }
 };
 __decorate([
     (0, tsoa_1.Get)(),
+    (0, tsoa_1.Security)('barearAuth', ['admin', 'worker']),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "getAllOrders", null);
 __decorate([
-    (0, tsoa_1.Get)("/{orderId}"),
+    (0, tsoa_1.Get)('/{orderId}'),
+    (0, tsoa_1.Security)('barearAuth', ['admin', 'worker', 'client']),
     __param(0, (0, tsoa_1.Path)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -46,13 +49,15 @@ __decorate([
 ], OrdersController.prototype, "getOrder", null);
 __decorate([
     (0, tsoa_1.Post)(),
+    (0, tsoa_1.Security)('barearAuth', ['admin']),
     __param(0, (0, tsoa_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "createOrder", null);
 __decorate([
-    (0, tsoa_1.Put)("/{orderId}"),
+    (0, tsoa_1.Put)('/{orderId}'),
+    (0, tsoa_1.Security)('barearAuth', ['admin', 'worker']),
     __param(0, (0, tsoa_1.Path)()),
     __param(1, (0, tsoa_1.Body)()),
     __metadata("design:type", Function),
@@ -60,15 +65,16 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "updateOrder", null);
 __decorate([
-    (0, tsoa_1.Delete)("/{orderId}"),
+    (0, tsoa_1.Delete)('/{orderId}'),
+    (0, tsoa_1.Security)('barearAuth', ['admin']),
     __param(0, (0, tsoa_1.Path)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "deleteOrder", null);
 OrdersController = __decorate([
-    (0, tsoa_1.Tags)("order"),
-    (0, tsoa_1.Route)("/orders")
+    (0, tsoa_1.Tags)('order'),
+    (0, tsoa_1.Route)('/orders')
 ], OrdersController);
 exports.OrdersController = OrdersController;
 //# sourceMappingURL=ordersController.js.map

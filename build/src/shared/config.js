@@ -33,79 +33,79 @@ const schema = {
     port: {
         format: Number,
         default: 3000,
-        env: "PORT",
+        env: 'PORT',
     },
     db: {
         name: {
             format: String,
-            default: "carRepearStation",
-            env: 'DB_NAME'
+            default: 'carRepearStation',
+            env: 'DB_NAME',
         },
         user: {
             format: String,
-            default: "postgres",
-            env: 'DB_USER'
+            default: 'postgres',
+            env: 'DB_USER',
         },
         password: {
             format: String,
-            default: "root",
-            env: 'DB_PASSWORD'
+            default: 'root',
+            env: 'DB_PASSWORD',
         },
         host: {
             format: String,
-            default: "localhost",
-            env: "DB_HOST",
+            default: 'localhost',
+            env: 'DB_HOST',
         },
         port: {
             format: Number,
             default: 5432,
-            env: "DB_PORT",
-        }
+            env: 'DB_PORT',
+        },
     },
     token: {
         secretKey: {
             format: String,
-            default: "secret KEY",
-            env: "SECRET_KEY",
+            default: 'secret KEY',
+            env: 'SECRET_KEY',
         },
         life: {
             format: String,
-            default: "12h",
-            env: "TOKEN_LIFE",
-        }
+            default: '12h',
+            env: 'TOKEN_LIFE',
+        },
     },
     saltRounds: {
         format: Number,
         default: 10,
-        env: "SALT_ROUNDS",
+        env: 'SALT_ROUNDS',
     },
     smtp: {
         host: {
             format: String,
             default: 'smtp.ukr.net',
-            env: "SMTP_HOST",
+            env: 'SMTP_HOST',
         },
         port: {
             format: Number,
             default: 465,
-            env: "SMTP_PORT",
+            env: 'SMTP_PORT',
         },
         user: {
             format: String,
-            default: " ",
-            env: "SMTP_USER",
+            default: ' ',
+            env: 'SMTP_USER',
         },
         password: {
             format: String,
-            default: " ",
-            env: "SMTP_PASSWORD",
-        }
+            default: ' ',
+            env: 'SMTP_PASSWORD',
+        },
     },
     apiURL: {
         format: String,
-        default: "http://localhost:3000",
-        env: 'API_URL'
-    }
+        default: 'http://localhost:3000',
+        env: 'API_URL',
+    },
 };
 const config = (0, convict_1.default)(schema);
 config.validate({ allowed: 'strict' });

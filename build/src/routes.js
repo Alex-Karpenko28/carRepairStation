@@ -30,12 +30,29 @@ const models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "OrderDto": {
+        "dataType": "refObject",
+        "properties": {
+            "id": { "dataType": "double", "required": true },
+            "workerId": { "dataType": "double", "required": true },
+            "clientId": { "dataType": "double", "required": true },
+            "orderStatus": { "dataType": "string", "required": true },
+            "orderDescription": { "dataType": "string", "required": true },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "OrderStatus": {
+        "dataType": "refEnum",
+        "enums": ["diagnostic", "ordering spare parts", "repair", "ready"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateOrderDto": {
         "dataType": "refObject",
         "properties": {
             "workerId": { "dataType": "double", "required": true },
             "clientId": { "dataType": "double", "required": true },
-            "orderStatus": { "dataType": "string", "required": true },
+            "orderStatus": { "ref": "OrderStatus", "required": true },
             "orderDescription": { "dataType": "string", "required": true },
         },
         "additionalProperties": false,
@@ -207,7 +224,7 @@ function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/orders', ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController)), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController.prototype.getAllOrders)), function OrdersController_getAllOrders(request, response, next) {
+    app.get('/orders', authenticateMiddleware([{ "barearAuth": ["admin", "worker"] }]), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController)), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController.prototype.getAllOrders)), function OrdersController_getAllOrders(request, response, next) {
         const args = {};
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
@@ -222,7 +239,7 @@ function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/orders/:orderId', ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController)), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController.prototype.getOrder)), function OrdersController_getOrder(request, response, next) {
+    app.get('/orders/:orderId', authenticateMiddleware([{ "barearAuth": ["admin", "worker", "client"] }]), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController)), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController.prototype.getOrder)), function OrdersController_getOrder(request, response, next) {
         const args = {
             orderId: { "in": "path", "name": "orderId", "required": true, "dataType": "double" },
         };
@@ -239,7 +256,7 @@ function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/orders', ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController)), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController.prototype.createOrder)), function OrdersController_createOrder(request, response, next) {
+    app.post('/orders', authenticateMiddleware([{ "barearAuth": ["admin"] }]), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController)), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController.prototype.createOrder)), function OrdersController_createOrder(request, response, next) {
         const args = {
             body: { "in": "body", "name": "body", "required": true, "ref": "CreateOrderDto" },
         };
@@ -256,7 +273,7 @@ function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/orders/:orderId', ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController)), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController.prototype.updateOrder)), function OrdersController_updateOrder(request, response, next) {
+    app.put('/orders/:orderId', authenticateMiddleware([{ "barearAuth": ["admin", "worker"] }]), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController)), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController.prototype.updateOrder)), function OrdersController_updateOrder(request, response, next) {
         const args = {
             orderId: { "in": "path", "name": "orderId", "required": true, "dataType": "double" },
             body: { "in": "body", "name": "body", "required": true, "ref": "CreateOrderDto" },
@@ -274,7 +291,7 @@ function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.delete('/orders/:orderId', ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController)), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController.prototype.deleteOrder)), function OrdersController_deleteOrder(request, response, next) {
+    app.delete('/orders/:orderId', authenticateMiddleware([{ "barearAuth": ["admin"] }]), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController)), ...((0, runtime_1.fetchMiddlewares)(ordersController_1.OrdersController.prototype.deleteOrder)), function OrdersController_deleteOrder(request, response, next) {
         const args = {
             orderId: { "in": "path", "name": "orderId", "required": true, "dataType": "double" },
         };

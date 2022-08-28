@@ -31,12 +31,29 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "OrderDto": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "workerId": {"dataType":"double","required":true},
+            "clientId": {"dataType":"double","required":true},
+            "orderStatus": {"dataType":"string","required":true},
+            "orderDescription": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "OrderStatus": {
+        "dataType": "refEnum",
+        "enums": ["diagnostic","ordering spare parts","repair","ready"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateOrderDto": {
         "dataType": "refObject",
         "properties": {
             "workerId": {"dataType":"double","required":true},
             "clientId": {"dataType":"double","required":true},
-            "orderStatus": {"dataType":"string","required":true},
+            "orderStatus": {"ref":"OrderStatus","required":true},
             "orderDescription": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
@@ -252,6 +269,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/orders',
+            authenticateMiddleware([{"barearAuth":["admin","worker"]}]),
             ...(fetchMiddlewares<RequestHandler>(OrdersController)),
             ...(fetchMiddlewares<RequestHandler>(OrdersController.prototype.getAllOrders)),
 
@@ -276,6 +294,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/orders/:orderId',
+            authenticateMiddleware([{"barearAuth":["admin","worker","client"]}]),
             ...(fetchMiddlewares<RequestHandler>(OrdersController)),
             ...(fetchMiddlewares<RequestHandler>(OrdersController.prototype.getOrder)),
 
@@ -301,6 +320,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/orders',
+            authenticateMiddleware([{"barearAuth":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(OrdersController)),
             ...(fetchMiddlewares<RequestHandler>(OrdersController.prototype.createOrder)),
 
@@ -326,6 +346,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/orders/:orderId',
+            authenticateMiddleware([{"barearAuth":["admin","worker"]}]),
             ...(fetchMiddlewares<RequestHandler>(OrdersController)),
             ...(fetchMiddlewares<RequestHandler>(OrdersController.prototype.updateOrder)),
 
@@ -352,6 +373,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.delete('/orders/:orderId',
+            authenticateMiddleware([{"barearAuth":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(OrdersController)),
             ...(fetchMiddlewares<RequestHandler>(OrdersController.prototype.deleteOrder)),
 
