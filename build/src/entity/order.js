@@ -41,7 +41,7 @@ __decorate([
     __metadata("design:type", Date)
 ], Order.prototype, "updatedAt", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => detail_1.Detail, (detail) => detail.order),
+    (0, typeorm_1.OneToMany)(() => detail_1.Detail, (detail) => detail.orderId),
     __metadata("design:type", Array)
 ], Order.prototype, "details", void 0);
 __decorate([

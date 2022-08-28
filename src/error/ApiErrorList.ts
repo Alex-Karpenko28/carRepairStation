@@ -8,5 +8,7 @@ export enum ErrorsList {
   EmailLogin =  "User with this login already exists",
   IncorrectLink = "IncorrectActivationLink",
   WrongId = "ClientId or workerId is missing from table user",
-  OrderNotFound = "Order not found"
+  OrderNotFound = "Order not found",
+  WrongIdOrd = "OrderId does not exist",
+  DetailNotFound = "detail not found"
 }

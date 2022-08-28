@@ -1,4 +1,4 @@
-import { CreateOrderDto, OrderStatus, OrderDto } from './orderDto'
+import { CreateOrderDto, OrderDto } from './orderDto'
 import { Order } from '../entity/order'
 import { AppDataSource } from '../data-source'
 import { ApiError } from '../error/ApiError'
@@ -29,7 +29,6 @@ export class OrderService {
             },
             where: { id: id },
         })
-        console.log(order)
         if (!order) {
             throw new ApiError(
                 ErrorsList.OrderNotFound,

@@ -49,10 +49,11 @@ __decorate([
 __decorate([
     (0, typeorm_1.ManyToOne)(() => order_1.Order, (order) => order.id, {
         onDelete: 'CASCADE',
-        orphanedRowAction: "delete" // NEW
+        orphanedRowAction: "delete"
     }),
-    __metadata("design:type", order_1.Order)
-], Detail.prototype, "order", void 0);
+    (0, typeorm_1.JoinColumn)({ name: 'orderId' }),
+    __metadata("design:type", Number)
+], Detail.prototype, "orderId", void 0);
 Detail = __decorate([
     (0, typeorm_1.Entity)("detail")
 ], Detail);

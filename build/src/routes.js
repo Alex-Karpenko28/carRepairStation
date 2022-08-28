@@ -26,6 +26,21 @@ const models = {
             "detailPartNumber": { "dataType": "string", "required": true },
             "avalabilityInWarehouse": { "dataType": "boolean", "required": true },
             "detailPrice": { "dataType": "double", "required": true },
+            "qty": { "dataType": "double", "required": true },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "DetailDto": {
+        "dataType": "refObject",
+        "properties": {
+            "id": { "dataType": "double", "required": true },
+            "orderId": { "dataType": "double", "required": true },
+            "detailTitle": { "dataType": "string", "required": true },
+            "detailPartNumber": { "dataType": "string", "required": true },
+            "avalabilityInWarehouse": { "dataType": "boolean", "required": true },
+            "detailPrice": { "dataType": "double", "required": true },
+            "qty": { "dataType": "double", "required": true },
         },
         "additionalProperties": false,
     },
@@ -140,7 +155,7 @@ function RegisterRoutes(app) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-    app.get('/details', ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController)), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController.prototype.getAllDetails)), function DetailsController_getAllDetails(request, response, next) {
+    app.get('/details', authenticateMiddleware([{ "barearAuth": ["admin"] }]), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController)), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController.prototype.getAllDetails)), function DetailsController_getAllDetails(request, response, next) {
         const args = {};
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
@@ -155,7 +170,7 @@ function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/details/:detailId', ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController)), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController.prototype.getDetail)), function DetailsController_getDetail(request, response, next) {
+    app.get('/details/:detailId', authenticateMiddleware([{ "barearAuth": ["admin"] }]), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController)), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController.prototype.getDetail)), function DetailsController_getDetail(request, response, next) {
         const args = {
             detailId: { "in": "path", "name": "detailId", "required": true, "dataType": "double" },
         };
@@ -172,7 +187,7 @@ function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/details', ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController)), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController.prototype.createDetail)), function DetailsController_createDetail(request, response, next) {
+    app.post('/details', authenticateMiddleware([{ "barearAuth": ["admin"] }]), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController)), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController.prototype.createDetail)), function DetailsController_createDetail(request, response, next) {
         const args = {
             body: { "in": "body", "name": "body", "required": true, "ref": "CreateDetailDto" },
         };
@@ -189,7 +204,7 @@ function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/details/:detailId', ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController)), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController.prototype.updateDetail)), function DetailsController_updateDetail(request, response, next) {
+    app.put('/details/:detailId', authenticateMiddleware([{ "barearAuth": ["admin"] }]), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController)), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController.prototype.updateDetail)), function DetailsController_updateDetail(request, response, next) {
         const args = {
             detailId: { "in": "path", "name": "detailId", "required": true, "dataType": "double" },
             body: { "in": "body", "name": "body", "required": true, "ref": "CreateDetailDto" },
@@ -207,7 +222,7 @@ function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.delete('/details/:detailId', ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController)), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController.prototype.deleteDetail)), function DetailsController_deleteDetail(request, response, next) {
+    app.delete('/details/:detailId', authenticateMiddleware([{ "barearAuth": ["admin"] }]), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController)), ...((0, runtime_1.fetchMiddlewares)(detailsController_1.DetailsController.prototype.deleteDetail)), function DetailsController_deleteDetail(request, response, next) {
         const args = {
             detailId: { "in": "path", "name": "detailId", "required": true, "dataType": "double" },
         };

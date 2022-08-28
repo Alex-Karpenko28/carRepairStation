@@ -14,31 +14,34 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DetailsController = void 0;
 const tsoa_1 = require("tsoa");
+const detailService_1 = require("./detailService");
 let DetailsController = class DetailsController extends tsoa_1.Controller {
     async getAllDetails() {
-        return null;
+        return new detailService_1.DetailService().getAllDetails();
     }
     async getDetail(detailId) {
-        return null;
+        return new detailService_1.DetailService().getConcreteDetail(detailId);
     }
     async createDetail(body) {
-        return null;
+        return new detailService_1.DetailService().createDetail(body);
     }
     async updateDetail(detailId, body) {
-        return null;
+        return new detailService_1.DetailService().updateConreteDetail(body, detailId);
     }
     async deleteDetail(detailId) {
-        //return null;
+        new detailService_1.DetailService().deleteConcreteDetail(detailId);
     }
 };
 __decorate([
     (0, tsoa_1.Get)(),
+    (0, tsoa_1.Security)('barearAuth', ['admin', 'worker']),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], DetailsController.prototype, "getAllDetails", null);
 __decorate([
-    (0, tsoa_1.Get)("/{detailId}"),
+    (0, tsoa_1.Get)('/{detailId}'),
+    (0, tsoa_1.Security)('barearAuth', ['admin', 'worker']),
     __param(0, (0, tsoa_1.Path)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -46,13 +49,15 @@ __decorate([
 ], DetailsController.prototype, "getDetail", null);
 __decorate([
     (0, tsoa_1.Post)(),
+    (0, tsoa_1.Security)('barearAuth', ['admin', 'worker']),
     __param(0, (0, tsoa_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], DetailsController.prototype, "createDetail", null);
 __decorate([
-    (0, tsoa_1.Put)("/{detailId}"),
+    (0, tsoa_1.Put)('/{detailId}'),
+    (0, tsoa_1.Security)('barearAuth', ['admin', 'worker']),
     __param(0, (0, tsoa_1.Path)()),
     __param(1, (0, tsoa_1.Body)()),
     __metadata("design:type", Function),
@@ -60,15 +65,16 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DetailsController.prototype, "updateDetail", null);
 __decorate([
-    (0, tsoa_1.Delete)("/{detailId}"),
+    (0, tsoa_1.Delete)('/{detailId}'),
+    (0, tsoa_1.Security)('barearAuth', ['admin', 'worker']),
     __param(0, (0, tsoa_1.Path)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], DetailsController.prototype, "deleteDetail", null);
 DetailsController = __decorate([
-    (0, tsoa_1.Tags)("detail"),
-    (0, tsoa_1.Route)("/details")
+    (0, tsoa_1.Tags)('detail'),
+    (0, tsoa_1.Route)('/details')
 ], DetailsController);
 exports.DetailsController = DetailsController;
 //# sourceMappingURL=detailsController.js.map

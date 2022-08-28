@@ -58,11 +58,11 @@ app.use(function errorHandler(
         })
     }
 
-    //  if (err instanceof Error) {
-    //      return res.status(500).json({
-    //         message: 'Internal Server Error',
-    //     })
-    //  }
+     if (err instanceof Error) {
+         return res.status(500).json({
+            message: 'Internal Server Error',
+        })
+     }
 
     next()
 })

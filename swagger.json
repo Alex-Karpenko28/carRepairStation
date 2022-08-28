@@ -24,6 +24,10 @@
 					"detailPrice": {
 						"type": "number",
 						"format": "double"
+					},
+					"qty": {
+						"type": "number",
+						"format": "double"
 					}
 				},
 				"required": [
@@ -31,7 +35,48 @@
 					"detailTitle",
 					"detailPartNumber",
 					"avalabilityInWarehouse",
-					"detailPrice"
+					"detailPrice",
+					"qty"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DetailDto": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"orderId": {
+						"type": "number",
+						"format": "double"
+					},
+					"detailTitle": {
+						"type": "string"
+					},
+					"detailPartNumber": {
+						"type": "string"
+					},
+					"avalabilityInWarehouse": {
+						"type": "boolean"
+					},
+					"detailPrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"qty": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"orderId",
+					"detailTitle",
+					"detailPartNumber",
+					"avalabilityInWarehouse",
+					"detailPrice",
+					"qty"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -311,7 +356,13 @@
 				"tags": [
 					"detail"
 				],
-				"security": [],
+				"security": [
+					{
+						"barearAuth": [
+							"admin"
+						]
+					}
+				],
 				"parameters": []
 			},
 			"post": {
@@ -322,7 +373,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/CreateDetailDto"
+									"$ref": "#/components/schemas/DetailDto"
 								}
 							}
 						}
@@ -331,7 +382,13 @@
 				"tags": [
 					"detail"
 				],
-				"security": [],
+				"security": [
+					{
+						"barearAuth": [
+							"admin"
+						]
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -363,7 +420,13 @@
 				"tags": [
 					"detail"
 				],
-				"security": [],
+				"security": [
+					{
+						"barearAuth": [
+							"admin"
+						]
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -393,7 +456,13 @@
 				"tags": [
 					"detail"
 				],
-				"security": [],
+				"security": [
+					{
+						"barearAuth": [
+							"admin"
+						]
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -426,7 +495,13 @@
 				"tags": [
 					"detail"
 				],
-				"security": [],
+				"security": [
+					{
+						"barearAuth": [
+							"admin"
+						]
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -517,7 +592,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OrderDto"
+									"items": {
+										"$ref": "#/components/schemas/OrderDto"
+									},
+									"type": "array"
 								}
 							}
 						}
@@ -555,7 +633,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/CreateOrderDto"
+									"items": {
+										"$ref": "#/components/schemas/CreateOrderDto"
+									},
+									"type": "array"
 								}
 							}
 						}

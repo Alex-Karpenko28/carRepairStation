@@ -1,33 +1,53 @@
-import { Body, Controller, Get, Path, Post,Put, Delete, Route, Tags } from "tsoa";
-import { CreateDetailDto } from "./detailDto";
+import {
+    Body,
+    Controller,
+    Get,
+    Path,
+    Post,
+    Put,
+    Delete,
+    Route,
+    Tags,
+    Security,
+} from 'tsoa'
+import { CreateDetailDto, DetailDto } from './detailDto'
+import { DetailService } from './detailService'
 
-@Tags("detail")
-@Route("/details")
+@Tags('detail')
+@Route('/details')
 export class DetailsController extends Controller {
-  @Get()
-  public async getAllDetails(): Promise<CreateDetailDto> {
-    return null;
-  }
+    @Get()
+    @Security('barearAuth', ['admin', 'worker'])
+    public async getAllDetails(): Promise<DetailDto[]> {
+        return new DetailService().getAllDetails()
+    }
 
-  @Get("/{detailId}")
-  public async getDetail(@Path() detailId: number): Promise<CreateDetailDto> {
-    return null;
-  }
+    @Get('/{detailId}')
+    @Security('barearAuth', ['admin', 'worker'])
+    public async getDetail(@Path() detailId: number): Promise<DetailDto[]> {
+        return new DetailService().getConcreteDetail(detailId)
+    }
 
-  @Post()
-  public async createDetail(@Body() body: CreateDetailDto): Promise<CreateDetailDto> {
-    return null;
-  }
+    @Post()
+    @Security('barearAuth', ['admin', 'worker'])
+    public async createDetail(
+        @Body() body: CreateDetailDto
+    ): Promise<DetailDto> {
+        return new DetailService().createDetail(body)
+    }
 
-  @Put("/{detailId}")
-  public async updateDetail(@Path() detailId: number, @Body() body: CreateDetailDto): Promise<CreateDetailDto> {
-    return null;
-  }
+    @Put('/{detailId}')
+    @Security('barearAuth', ['admin', 'worker'])
+    public async updateDetail(
+        @Path() detailId: number,
+        @Body() body: CreateDetailDto
+    ): Promise<DetailDto[]> {
+        return new DetailService().updateConreteDetail(body, detailId)
+    }
 
-  @Delete("/{detailId}")
-  public async deleteDetail(@Path() detailId: number): Promise<void> {
-    //return null;
-  }
-
-
+    @Delete('/{detailId}')
+    @Security('barearAuth', ['admin', 'worker'])
+    public async deleteDetail(@Path() detailId: number): Promise<void> {
+        new DetailService().deleteConcreteDetail(detailId)
+    }
 }

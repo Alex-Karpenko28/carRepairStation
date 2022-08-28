@@ -27,6 +27,21 @@ const models: TsoaRoute.Models = {
             "detailPartNumber": {"dataType":"string","required":true},
             "avalabilityInWarehouse": {"dataType":"boolean","required":true},
             "detailPrice": {"dataType":"double","required":true},
+            "qty": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "DetailDto": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "orderId": {"dataType":"double","required":true},
+            "detailTitle": {"dataType":"string","required":true},
+            "detailPartNumber": {"dataType":"string","required":true},
+            "avalabilityInWarehouse": {"dataType":"boolean","required":true},
+            "detailPrice": {"dataType":"double","required":true},
+            "qty": {"dataType":"double","required":true},
         },
         "additionalProperties": false,
     },
@@ -144,6 +159,7 @@ export function RegisterRoutes(app: express.Router) {
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
         app.get('/details',
+            authenticateMiddleware([{"barearAuth":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(DetailsController)),
             ...(fetchMiddlewares<RequestHandler>(DetailsController.prototype.getAllDetails)),
 
@@ -168,6 +184,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/details/:detailId',
+            authenticateMiddleware([{"barearAuth":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(DetailsController)),
             ...(fetchMiddlewares<RequestHandler>(DetailsController.prototype.getDetail)),
 
@@ -193,6 +210,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/details',
+            authenticateMiddleware([{"barearAuth":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(DetailsController)),
             ...(fetchMiddlewares<RequestHandler>(DetailsController.prototype.createDetail)),
 
@@ -218,6 +236,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/details/:detailId',
+            authenticateMiddleware([{"barearAuth":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(DetailsController)),
             ...(fetchMiddlewares<RequestHandler>(DetailsController.prototype.updateDetail)),
 
@@ -244,6 +263,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.delete('/details/:detailId',
+            authenticateMiddleware([{"barearAuth":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(DetailsController)),
             ...(fetchMiddlewares<RequestHandler>(DetailsController.prototype.deleteDetail)),
 

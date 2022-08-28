@@ -13,5 +13,7 @@ var ErrorsList;
     ErrorsList["IncorrectLink"] = "IncorrectActivationLink";
     ErrorsList["WrongId"] = "ClientId or workerId is missing from table user";
     ErrorsList["OrderNotFound"] = "Order not found";
+    ErrorsList["WrongIdOrd"] = "OrderId does not exist";
+    ErrorsList["DetailNotFound"] = "detail not found";
 })(ErrorsList = exports.ErrorsList || (exports.ErrorsList = {}));
 //# sourceMappingURL=ApiErrorList.js.map

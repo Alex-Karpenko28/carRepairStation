@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  JoinColumn
 } from "typeorm";
 import { Order } from "./order";
 
@@ -36,8 +37,9 @@ export class Detail {
 
   @ManyToOne(() => Order, (order) => order.id,{
     onDelete: 'CASCADE',
-    orphanedRowAction: "delete" // NEW
+    orphanedRowAction: "delete" 
   })
-  order: Order;
+  @JoinColumn({ name: 'orderId' })
+  orderId: number;
 }
 
