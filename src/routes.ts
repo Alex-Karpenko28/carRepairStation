@@ -7,7 +7,7 @@ import { DetailsController } from './detail/detailsController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { OrdersController } from './order/ordersController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { OrderPaymentController } from './orderPayment/ordersPaymentController';
+import { OrderPaymentController } from './orderPayment/orderPaymentController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { UsersController } from './user/usersController';
 import { expressAuthentication } from './authentication';
@@ -19,9 +19,10 @@ import * as express from 'express';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-    "CreateDetailDto": {
+    "DetailDto": {
         "dataType": "refObject",
         "properties": {
+            "id": {"dataType":"double","required":true},
             "orderId": {"dataType":"double","required":true},
             "detailTitle": {"dataType":"string","required":true},
             "detailPartNumber": {"dataType":"string","required":true},
@@ -32,10 +33,9 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "DetailDto": {
+    "CreateDetailDto": {
         "dataType": "refObject",
         "properties": {
-            "id": {"dataType":"double","required":true},
             "orderId": {"dataType":"double","required":true},
             "detailTitle": {"dataType":"string","required":true},
             "detailPartNumber": {"dataType":"string","required":true},
@@ -74,12 +74,33 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "CreateOrderPaymentDto": {
+    "OrderPaymentDto": {
         "dataType": "refObject",
         "properties": {
             "clientId": {"dataType":"double","required":true},
             "orderId": {"dataType":"double","required":true},
             "detailPriceSum": {"dataType":"double","required":true},
+            "workPrice": {"dataType":"double","required":true},
+            "paymentConformation": {"dataType":"boolean","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CreateOrderPaymentDto": {
+        "dataType": "refObject",
+        "properties": {
+            "clientId": {"dataType":"double","required":true},
+            "orderId": {"dataType":"double","required":true},
+            "workPrice": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UpdateOrderPaymentDto": {
+        "dataType": "refObject",
+        "properties": {
+            "clientId": {"dataType":"double","required":true},
+            "orderId": {"dataType":"double","required":true},
             "workPrice": {"dataType":"double","required":true},
             "paymentConformation": {"dataType":"boolean","required":true},
         },
@@ -159,7 +180,7 @@ export function RegisterRoutes(app: express.Router) {
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
         app.get('/details',
-            authenticateMiddleware([{"barearAuth":["admin"]}]),
+            authenticateMiddleware([{"barearAuth":["admin","worker"]}]),
             ...(fetchMiddlewares<RequestHandler>(DetailsController)),
             ...(fetchMiddlewares<RequestHandler>(DetailsController.prototype.getAllDetails)),
 
@@ -184,7 +205,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/details/:detailId',
-            authenticateMiddleware([{"barearAuth":["admin"]}]),
+            authenticateMiddleware([{"barearAuth":["admin","worker"]}]),
             ...(fetchMiddlewares<RequestHandler>(DetailsController)),
             ...(fetchMiddlewares<RequestHandler>(DetailsController.prototype.getDetail)),
 
@@ -210,7 +231,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/details',
-            authenticateMiddleware([{"barearAuth":["admin"]}]),
+            authenticateMiddleware([{"barearAuth":["admin","worker"]}]),
             ...(fetchMiddlewares<RequestHandler>(DetailsController)),
             ...(fetchMiddlewares<RequestHandler>(DetailsController.prototype.createDetail)),
 
@@ -236,7 +257,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/details/:detailId',
-            authenticateMiddleware([{"barearAuth":["admin"]}]),
+            authenticateMiddleware([{"barearAuth":["admin","worker"]}]),
             ...(fetchMiddlewares<RequestHandler>(DetailsController)),
             ...(fetchMiddlewares<RequestHandler>(DetailsController.prototype.updateDetail)),
 
@@ -263,7 +284,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.delete('/details/:detailId',
-            authenticateMiddleware([{"barearAuth":["admin"]}]),
+            authenticateMiddleware([{"barearAuth":["admin","worker"]}]),
             ...(fetchMiddlewares<RequestHandler>(DetailsController)),
             ...(fetchMiddlewares<RequestHandler>(DetailsController.prototype.deleteDetail)),
 
@@ -419,6 +440,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/orderPayment',
+            authenticateMiddleware([{"barearAuth":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(OrderPaymentController)),
             ...(fetchMiddlewares<RequestHandler>(OrderPaymentController.prototype.getAllPayment)),
 
@@ -443,6 +465,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/orderPayment/:orderPaymentId',
+            authenticateMiddleware([{"barearAuth":["admin","client"]}]),
             ...(fetchMiddlewares<RequestHandler>(OrderPaymentController)),
             ...(fetchMiddlewares<RequestHandler>(OrderPaymentController.prototype.getOrderPayment)),
 
@@ -468,6 +491,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/orderPayment',
+            authenticateMiddleware([{"barearAuth":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(OrderPaymentController)),
             ...(fetchMiddlewares<RequestHandler>(OrderPaymentController.prototype.createOrderPayment)),
 
@@ -493,13 +517,14 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/orderPayment/:orderPaymentId',
+            authenticateMiddleware([{"barearAuth":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(OrderPaymentController)),
             ...(fetchMiddlewares<RequestHandler>(OrderPaymentController.prototype.updateOrderPayment)),
 
             function OrderPaymentController_updateOrderPayment(request: any, response: any, next: any) {
             const args = {
                     orderPaymentId: {"in":"path","name":"orderPaymentId","required":true,"dataType":"double"},
-                    body: {"in":"body","name":"body","required":true,"ref":"CreateOrderPaymentDto"},
+                    body: {"in":"body","name":"body","required":true,"ref":"UpdateOrderPaymentDto"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

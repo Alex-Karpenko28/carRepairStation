@@ -20,11 +20,11 @@ __decorate([
     __metadata("design:type", Number)
 ], OrderPayment.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "numeric", precision: 10, scale: 3 }),
+    (0, typeorm_1.Column)({ type: 'numeric', precision: 10, scale: 3 }),
     __metadata("design:type", Number)
 ], OrderPayment.prototype, "detailPriceSum", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "numeric", precision: 10, scale: 3 }),
+    (0, typeorm_1.Column)({ type: 'numeric', precision: 10, scale: 3 }),
     __metadata("design:type", Number)
 ], OrderPayment.prototype, "workPrice", void 0);
 __decorate([
@@ -42,20 +42,21 @@ __decorate([
 __decorate([
     (0, typeorm_1.OneToOne)(() => order_1.Order, {
         onDelete: 'CASCADE',
-        orphanedRowAction: "delete" // NEW
+        orphanedRowAction: 'delete',
     }),
-    (0, typeorm_1.JoinColumn)(),
-    __metadata("design:type", order_1.Order)
-], OrderPayment.prototype, "order", void 0);
+    (0, typeorm_1.JoinColumn)({ name: 'orderId' }),
+    __metadata("design:type", Number)
+], OrderPayment.prototype, "orderId", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => user_1.User, (client) => client.id, {
         onDelete: 'CASCADE',
-        orphanedRowAction: "delete" // NEW
+        orphanedRowAction: 'delete',
     }),
-    __metadata("design:type", user_1.User)
-], OrderPayment.prototype, "client", void 0);
+    (0, typeorm_1.JoinColumn)({ name: 'clientId' }),
+    __metadata("design:type", Number)
+], OrderPayment.prototype, "clientId", void 0);
 OrderPayment = __decorate([
-    (0, typeorm_1.Entity)("orderPayment")
+    (0, typeorm_1.Entity)('orderPayment')
 ], OrderPayment);
 exports.OrderPayment = OrderPayment;
 //# sourceMappingURL=orderPayment.js.map

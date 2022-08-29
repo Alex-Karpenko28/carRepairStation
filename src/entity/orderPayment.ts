@@ -1,46 +1,47 @@
 import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  OneToOne,
-  JoinColumn,
-  ManyToOne,
-} from "typeorm";
-import { Order } from "./order";
-import { User } from "./user";
+    Column,
+    Entity,
+    PrimaryGeneratedColumn,
+    CreateDateColumn,
+    UpdateDateColumn,
+    OneToOne,
+    JoinColumn,
+    ManyToOne,
+} from 'typeorm'
+import { Order } from './order'
+import { User } from './user'
 
-@Entity("orderPayment")
+@Entity('orderPayment')
 export class OrderPayment {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number
 
-  @Column({ type: "numeric", precision: 10, scale: 3 })
-  detailPriceSum: number;
+    @Column({ type: 'numeric', precision: 10, scale: 3 })
+    detailPriceSum: number
 
-  @Column({ type: "numeric", precision: 10, scale: 3 })
-  workPrice: number;
+    @Column({ type: 'numeric', precision: 10, scale: 3 })
+    workPrice: number
 
-  @Column({ default: false })
-  paymentConformation: boolean;
+    @Column({ default: false })
+    paymentConformation: boolean
 
-  @CreateDateColumn()
-  createdAt: Date;
+    @CreateDateColumn()
+    createdAt: Date
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+    @UpdateDateColumn()
+    updatedAt: Date
 
-  @OneToOne(() => Order, {
-    onDelete: 'CASCADE',
-    orphanedRowAction: "delete" // NEW
-  })
-  @JoinColumn()
-  order: Order;
+    @OneToOne(() => Order, {
+        onDelete: 'CASCADE',
+        orphanedRowAction: 'delete',
+    })
+    @JoinColumn({ name: 'orderId' })
+    orderId: number
 
-  @ManyToOne(() => User, (client) => client.id, {
-    onDelete: 'CASCADE',
-    orphanedRowAction: "delete" // NEW
-  })
-  client: User;
+    @ManyToOne(() => User, (client) => client.id, {
+        onDelete: 'CASCADE',
+        orphanedRowAction: 'delete',
+    })
+    @JoinColumn({ name: 'clientId' })
+    clientId: number
 }

@@ -35,6 +35,7 @@ export class Order {
   updatedAt: Date;
 
   @OneToMany(() => Detail, (detail) => detail.orderId)
+  @JoinColumn({ name: 'orderId' })
   details: Detail[];
 
   @ManyToOne(() => User, (worker) => worker.orders,{

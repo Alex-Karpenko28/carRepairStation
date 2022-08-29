@@ -6,41 +6,6 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"CreateDetailDto": {
-				"properties": {
-					"orderId": {
-						"type": "number",
-						"format": "double"
-					},
-					"detailTitle": {
-						"type": "string"
-					},
-					"detailPartNumber": {
-						"type": "string"
-					},
-					"avalabilityInWarehouse": {
-						"type": "boolean"
-					},
-					"detailPrice": {
-						"type": "number",
-						"format": "double"
-					},
-					"qty": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"orderId",
-					"detailTitle",
-					"detailPartNumber",
-					"avalabilityInWarehouse",
-					"detailPrice",
-					"qty"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"DetailDto": {
 				"properties": {
 					"id": {
@@ -71,6 +36,41 @@
 				},
 				"required": [
 					"id",
+					"orderId",
+					"detailTitle",
+					"detailPartNumber",
+					"avalabilityInWarehouse",
+					"detailPrice",
+					"qty"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateDetailDto": {
+				"properties": {
+					"orderId": {
+						"type": "number",
+						"format": "double"
+					},
+					"detailTitle": {
+						"type": "string"
+					},
+					"detailPartNumber": {
+						"type": "string"
+					},
+					"avalabilityInWarehouse": {
+						"type": "boolean"
+					},
+					"detailPrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"qty": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
 					"orderId",
 					"detailTitle",
 					"detailPartNumber",
@@ -147,7 +147,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"CreateOrderPaymentDto": {
+			"OrderPaymentDto": {
 				"properties": {
 					"clientId": {
 						"type": "number",
@@ -173,6 +173,56 @@
 					"clientId",
 					"orderId",
 					"detailPriceSum",
+					"workPrice",
+					"paymentConformation"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateOrderPaymentDto": {
+				"properties": {
+					"clientId": {
+						"type": "number",
+						"format": "double"
+					},
+					"orderId": {
+						"type": "number",
+						"format": "double"
+					},
+					"workPrice": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"clientId",
+					"orderId",
+					"workPrice"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateOrderPaymentDto": {
+				"properties": {
+					"clientId": {
+						"type": "number",
+						"format": "double"
+					},
+					"orderId": {
+						"type": "number",
+						"format": "double"
+					},
+					"workPrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"paymentConformation": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"clientId",
+					"orderId",
 					"workPrice",
 					"paymentConformation"
 				],
@@ -347,7 +397,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/CreateDetailDto"
+									"items": {
+										"$ref": "#/components/schemas/DetailDto"
+									},
+									"type": "array"
 								}
 							}
 						}
@@ -359,7 +412,8 @@
 				"security": [
 					{
 						"barearAuth": [
-							"admin"
+							"admin",
+							"worker"
 						]
 					}
 				],
@@ -385,7 +439,8 @@
 				"security": [
 					{
 						"barearAuth": [
-							"admin"
+							"admin",
+							"worker"
 						]
 					}
 				],
@@ -411,7 +466,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/CreateDetailDto"
+									"items": {
+										"$ref": "#/components/schemas/DetailDto"
+									},
+									"type": "array"
 								}
 							}
 						}
@@ -423,7 +481,8 @@
 				"security": [
 					{
 						"barearAuth": [
-							"admin"
+							"admin",
+							"worker"
 						]
 					}
 				],
@@ -447,7 +506,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/CreateDetailDto"
+									"items": {
+										"$ref": "#/components/schemas/DetailDto"
+									},
+									"type": "array"
 								}
 							}
 						}
@@ -459,7 +521,8 @@
 				"security": [
 					{
 						"barearAuth": [
-							"admin"
+							"admin",
+							"worker"
 						]
 					}
 				],
@@ -498,7 +561,8 @@
 				"security": [
 					{
 						"barearAuth": [
-							"admin"
+							"admin",
+							"worker"
 						]
 					}
 				],
@@ -714,7 +778,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/CreateOrderPaymentDto"
+									"items": {
+										"$ref": "#/components/schemas/OrderPaymentDto"
+									},
+									"type": "array"
 								}
 							}
 						}
@@ -723,7 +790,13 @@
 				"tags": [
 					"orderPayment"
 				],
-				"security": [],
+				"security": [
+					{
+						"barearAuth": [
+							"admin"
+						]
+					}
+				],
 				"parameters": []
 			},
 			"post": {
@@ -734,7 +807,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/CreateOrderPaymentDto"
+									"$ref": "#/components/schemas/OrderPaymentDto"
 								}
 							}
 						}
@@ -743,7 +816,13 @@
 				"tags": [
 					"orderPayment"
 				],
-				"security": [],
+				"security": [
+					{
+						"barearAuth": [
+							"admin"
+						]
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -766,7 +845,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/CreateOrderPaymentDto"
+									"items": {
+										"$ref": "#/components/schemas/OrderPaymentDto"
+									},
+									"type": "array"
 								}
 							}
 						}
@@ -775,7 +857,14 @@
 				"tags": [
 					"orderPayment"
 				],
-				"security": [],
+				"security": [
+					{
+						"barearAuth": [
+							"admin",
+							"client"
+						]
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -796,7 +885,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/CreateOrderPaymentDto"
+									"items": {
+										"$ref": "#/components/schemas/OrderPaymentDto"
+									},
+									"type": "array"
 								}
 							}
 						}
@@ -805,7 +897,13 @@
 				"tags": [
 					"orderPayment"
 				],
-				"security": [],
+				"security": [
+					{
+						"barearAuth": [
+							"admin"
+						]
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -822,7 +920,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/CreateOrderPaymentDto"
+								"$ref": "#/components/schemas/UpdateOrderPaymentDto"
 							}
 						}
 					}
