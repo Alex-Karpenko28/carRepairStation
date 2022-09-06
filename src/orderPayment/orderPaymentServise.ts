@@ -9,10 +9,28 @@ import { Detail } from '../entity/detail'
 const detailRepository = AppDataSource.getRepository(Detail)
 const orderPaymentRepository = AppDataSource.getRepository(OrderPayment)
 
+
+async function detailsPriceSummary(orderId: number): Promise<number> {
+    const detailPriceSumDataBase = await detailRepository.find({
+        relations: {
+            orderId: true,
+        },
+        where: { orderId: { id: orderId } },
+        select: {
+            detailPrice: true,
+        },
+    })
+
+    return detailPriceSumDataBase.reduce(
+        (accumulator, item) => accumulator + Number(item.detailPrice),
+        0
+    ) 
+}
+
 export class OrderPaymentService {
 
   public async getAllOrdersPayments(): Promise<OrderPaymentDto[]> {
-    const orders: any[] = await orderPaymentRepository.find({
+    const orders = await orderPaymentRepository.find({
       relations: {
           orderId: true,
           clientId: true,
@@ -26,7 +44,7 @@ export class OrderPaymentService {
 }
 
 public async getConcreteOrderPayment(id: number): Promise<OrderPaymentDto[]> {
-  const orderPayment: any[] = await orderPaymentRepository.find({
+  const orderPayment = await orderPaymentRepository.find({
     relations: {
       orderId: true,
       clientId: true,
@@ -51,26 +69,12 @@ public async getConcreteOrderPayment(id: number): Promise<OrderPaymentDto[]> {
     public async createOrderPayment(
         orderPayParam: CreateOrderPaymentDto
     ): Promise<OrderPaymentDto> {
-        const detailPriceSumDataBase = await detailRepository.find({
-            relations: {
-                orderId: true,
-            },
-            where: { orderId: { id: orderPayParam.orderId } },
-            select: {
-                detailPrice: true,
-            },
-        })
-
-        const detailPriceSum = detailPriceSumDataBase.reduce(
-            (accumulator, item) => accumulator + Number(item.detailPrice),
-            0
-        )
 
         const newOrderPay = new OrderPayment()
         newOrderPay.orderId = orderPayParam.orderId
         newOrderPay.clientId = orderPayParam.clientId
         newOrderPay.workPrice = orderPayParam.workPrice
-        newOrderPay.detailPriceSum = detailPriceSum
+        newOrderPay.detailPriceSum = await detailsPriceSummary(orderPayParam.orderId)
 
         let orderPay
         try {
@@ -100,29 +104,24 @@ public async getConcreteOrderPayment(id: number): Promise<OrderPaymentDto[]> {
       body: UpdateOrderPaymentDto,
       id: number
   ): Promise<OrderPaymentDto[]> {
+    
+    const orderPaymentCheck = await orderPaymentRepository.find({
+          where: { id: id },
+      })
+      
+      if (!orderPaymentCheck[0]) {
+          throw new ApiError(
+              ErrorsList.OrderNotFound,
+              StatusCodes.BAD_REQUEST,
+              'order payment not found'
+          )
+      }
 
-    const detailPriceSumDataBase = await detailRepository.find({
-      relations: {
-          orderId: true,
-      },
-      where: { orderId: {id: body.orderId} },
-      select: {
-          detailPrice: true,
-      },
-  })
-
-  console.log("from consol", detailPriceSumDataBase);
-  
-  const detailPriceSum = detailPriceSumDataBase.reduce(
-      (accumulator, item) => accumulator + Number(item.detailPrice),
-      0
-  )
-  
       try {
           await orderPaymentRepository.update(id, {
             clientId: body.clientId,
             orderId: body.orderId,
-            detailPriceSum: detailPriceSum,
+            detailPriceSum: await detailsPriceSummary(body.orderId),
             workPrice: body.workPrice,
             paymentConformation: body.paymentConformation
           })
@@ -136,7 +135,7 @@ public async getConcreteOrderPayment(id: number): Promise<OrderPaymentDto[]> {
           }
       }
 
-      const orderPayment: any[] = await orderPaymentRepository.find({
+      const orderPayment = await orderPaymentRepository.find({
         relations: {
           orderId: true,
           clientId: true,
@@ -151,3 +150,6 @@ public async getConcreteOrderPayment(id: number): Promise<OrderPaymentDto[]> {
       return orderPayment
   }
 }
+
+
+

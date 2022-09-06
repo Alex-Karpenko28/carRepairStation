@@ -31,6 +31,9 @@ const jwt = __importStar(require("jsonwebtoken"));
 const user_1 = require("./entity/user");
 const data_source_1 = require("./data-source");
 const config_1 = __importDefault(require("./shared/config"));
+const ApiError_1 = require("./error/ApiError");
+const ApiErrorList_1 = require("./error/ApiErrorList");
+const http_status_codes_1 = require("http-status-codes");
 const verifyJWT = async (token) => new Promise((resolve, reject) => {
     jwt.verify(token, config_1.default.get('token.secretKey'), (err, data) => {
         if (err) {
@@ -46,18 +49,24 @@ async function expressAuthentication(request, securityName, roles // admin worke
         return undefined;
     const authorization = request.headers.authorization;
     if (!authorization) {
-        throw new Error('Not Authorized');
+        throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.NotAuthorized, http_status_codes_1.StatusCodes.UNAUTHORIZED, 'Not Authorized');
     }
-    const payload = await verifyJWT(authorization);
+    let payload;
+    try {
+        payload = await verifyJWT(authorization);
+    }
+    catch (err) {
+        throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.NotAuthorized, http_status_codes_1.StatusCodes.UNAUTHORIZED, 'Not Authorized');
+    }
     const role = payload.role;
     if (!roles.includes(role)) {
-        throw new Error('Forbidden! User is not authorized');
+        throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.NotAuthorized, http_status_codes_1.StatusCodes.FORBIDDEN, 'Forbidden! User is not authorized');
     }
     const user = await userRepository.findOneBy({
         id: payload.id,
     });
     if (payload.tokenSalt != user.tokenSalt) {
-        throw new Error('Not Authorized');
+        throw new ApiError_1.ApiError(ApiErrorList_1.ErrorsList.NotAuthorized, http_status_codes_1.StatusCodes.UNAUTHORIZED, 'Not Authorized');
     }
     request.context = { userId: payload.id };
 }

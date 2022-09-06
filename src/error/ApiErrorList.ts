@@ -10,5 +10,6 @@ export enum ErrorsList {
   WrongId = "ClientId or workerId is missing from table user",
   OrderNotFound = "Order not found",
   WrongIdOrd = "OrderId does not exist",
-  DetailNotFound = "detail not found"
+  DetailNotFound = "detail not found",
+  NotAuthorized = "Not Authorized"
 }

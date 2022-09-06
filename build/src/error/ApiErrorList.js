@@ -15,5 +15,6 @@ var ErrorsList;
     ErrorsList["OrderNotFound"] = "Order not found";
     ErrorsList["WrongIdOrd"] = "OrderId does not exist";
     ErrorsList["DetailNotFound"] = "detail not found";
+    ErrorsList["NotAuthorized"] = "Not Authorized";
 })(ErrorsList = exports.ErrorsList || (exports.ErrorsList = {}));
 //# sourceMappingURL=ApiErrorList.js.map

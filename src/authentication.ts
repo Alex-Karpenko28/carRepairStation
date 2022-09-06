@@ -4,6 +4,9 @@ import { JWTPayload } from './user/userDto'
 import { User } from './entity/user'
 import { AppDataSource } from './data-source'
 import config from './shared/config'
+import { ApiError } from './error/ApiError'
+import { ErrorsList } from './error/ApiErrorList'
+import { StatusCodes } from 'http-status-codes'
 
 const verifyJWT = async (token: string): Promise<JWTPayload> =>
     new Promise((resolve, reject) => {
@@ -22,16 +25,35 @@ export async function expressAuthentication(
     securityName: string,
     roles?: string[] // admin worker client
 ): Promise<any> {
-    if (securityName !== 'barearAuth') return undefined
+        if (securityName !== 'barearAuth') return undefined
     const authorization = request.headers.authorization
     if (!authorization) {
-        throw new Error('Not Authorized')
+        throw new ApiError(
+            ErrorsList.NotAuthorized,
+            StatusCodes.UNAUTHORIZED,
+            'Not Authorized'
+        )
     }
-    const payload: JWTPayload = await verifyJWT(authorization)
-    const role = payload.role
+
+      let payload: JWTPayload
+    try {
+        payload = await verifyJWT(authorization)
+    } catch (err) {
+        throw new ApiError(
+            ErrorsList.NotAuthorized,
+            StatusCodes.UNAUTHORIZED,
+            'Not Authorized'
+        )
+    }
+
+        const role = payload.role
 
     if (!roles.includes(role)) {
-        throw new Error('Forbidden! User is not authorized')
+        throw new ApiError(
+            ErrorsList.NotAuthorized,
+            StatusCodes.FORBIDDEN,
+            'Forbidden! User is not authorized'
+        )
     }
 
     const user = await userRepository.findOneBy({
@@ -39,7 +61,11 @@ export async function expressAuthentication(
     })
 
     if (payload.tokenSalt != user.tokenSalt) {
-        throw new Error('Not Authorized')
+        throw new ApiError(
+            ErrorsList.NotAuthorized,
+            StatusCodes.UNAUTHORIZED,
+            'Not Authorized'
+        )
     }
 
     request.context = { userId: payload.id }
