@@ -9,23 +9,28 @@ const orderRepository = AppDataSource.getRepository(Order)
 
 export class OrderService {
     public async getAllOrders(): Promise<OrderDto[]> {
-        const orders: any[] = await orderRepository
-            .createQueryBuilder('order')
-            .leftJoinAndSelect('order.clientId', 'orderss')
-            .leftJoinAndSelect('order.workerId', 'orders')
-            .getMany()
-        return orders.map((e) => ({
-            ...e,
-            clientId: e.clientId?.id,
-            workerId: e.workerId?.id,
-        }))
+        const orders = await orderRepository.find({
+            relations: {
+                workerId: true,
+                clientId: true,
+            },
+            select: {
+                workerId: { id: true },
+                clientId: { id: true },
+            }
+        })
+        return orders
     }
 
     public async getConcreteOrder(id: number): Promise<OrderDto[]> {
-        const order: any[] = await orderRepository.find({
+        const order = await orderRepository.find({
             relations: {
                 clientId: true,
                 workerId: true,
+            },
+            select: {
+                workerId: { id: true },
+                clientId: { id: true },
             },
             where: { id: id },
         })
@@ -36,11 +41,7 @@ export class OrderService {
                 'order not found'
             )
         }
-        return order.map((e) => ({
-            ...e,
-            clientId: e.clientId?.id,
-            workerId: e.workerId?.id,
-        }))
+        return order
     }
 
     public async createOrder(orderParam: CreateOrderDto): Promise<OrderDto> {
@@ -103,55 +104,18 @@ export class OrderService {
             }
         }
 
-        const order: any[] = await orderRepository.find({
+        const order = await orderRepository.find({
             relations: {
                 clientId: true,
                 workerId: true,
             },
+            select: {
+                workerId: { id: true },
+                clientId: { id: true },
+            },
             where: { id: id },
         })
 
-        return order.map((e) => ({
-            ...e,
-            clientId: e.clientId?.id,
-            workerId: e.workerId?.id,
-        }))
+        return order
     }
 }
-
-
-
-/*const orders = await orderRepository
-.createQueryBuilder('order')
-.leftJoinAndSelect('order.clientId', 'orderss')
-.leftJoinAndSelect( 'order.workerId', "orders")
-.getMany()
-
-const orders = await orderRepository
-            .createQueryBuilder('order')
-            .select([
-                'order.id',
-                'order.orderStatus',
-                'order.orderDescription',
-                'order.createdAt',
-            ])
-            .leftJoinAndSelect('order.clientId', 'orderss')
-            .leftJoinAndSelect('order.workerId', 'orders')
-            .getMany()
-
-*/
-
-/*
-public async getAllOrders(): Promise<OrderDto[]> {
-        const orders: any[] = await orderRepository
-            .createQueryBuilder('order')
-            .leftJoinAndSelect('order.clientId', 'orderss')
-            .leftJoinAndSelect('order.workerId', 'orders')
-            .getMany()
-
-
-
-
-        return orders.map((e) => ({ ...e, clientId: e.clientId?.id, workerId: e.workerId?.id }))
-
-*/

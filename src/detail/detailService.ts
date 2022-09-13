@@ -9,21 +9,25 @@ const detailRepository = AppDataSource.getRepository(Detail)
 
 export class DetailService {
     public async getAllDetails(): Promise<DetailDto[]> {
-        const details: any[] = await detailRepository
-            .createQueryBuilder('detail')
-            .leftJoinAndSelect('detail.orderId', 'details')
-            .getMany()
-
-        return details.map((e) => ({
-            ...e,
-            orderId: e.orderId?.id,
-        }))
+        const details = await detailRepository.find({
+            relations: {
+              orderId: true,
+          },
+          select: {
+              orderId: {id:true},
+          }
+          }
+        )
+        return details
     }
 
     public async getConcreteDetail(id: number): Promise<DetailDto[]> {
-        const detail: any[] = await detailRepository.find({
+        const detail = await detailRepository.find({
             relations: {
                 orderId: true,
+            },
+            select: {
+                orderId: {id:true},
             },
             where: { id: id },
         })
@@ -34,10 +38,7 @@ export class DetailService {
                 'detail not found'
             )
         }
-        return detail.map((e) => ({
-            ...e,
-            orderId: e.orderId?.id,
-        }))
+        return detail
     }
 
     public async createDetail(
@@ -100,17 +101,17 @@ export class DetailService {
             }
         }
 
-        const detail: any[] = await detailRepository.find({
+        const detail = await detailRepository.find({
             relations: {
                 orderId: true,
+            },
+            select: {
+                orderId: {id:true},
             },
             where: { id: id },
         })
 
-        return detail.map((e) => ({
-            ...e,
-            orderId: e.orderId?.id,
-        }))
+        return detail
     }
 
     public async deleteConcreteDetail(id: number): Promise<void> {

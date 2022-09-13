@@ -16,11 +16,12 @@ import { ApiError } from '../error/ApiError'
 import { ErrorsList } from '../error/ApiErrorList'
 import { StatusCodes } from 'http-status-codes'
 import config from '../shared/config'
+import { Repository } from 'typeorm'
 
 const SALT_RANGE_DOWN = 0
 const SALT_RANGE_UP = 1000000
 
-const userRepository = AppDataSource.getRepository(User)
+//const userRepository = AppDataSource.getRepository(User)
 
 const comparePass = (password: string, hash: string): Promise<boolean> =>
     bcrypt.compare(password, hash)
@@ -52,8 +53,16 @@ const random = async (): Promise<number> =>
 const activationLinkGenerate = () => crypto.randomUUID()
 
 export class UsersService {
+    private userRepository: Repository<User>
+
+    constructor(
+        userRepository: Repository<User> = AppDataSource.getRepository(User)
+    ) {
+        this.userRepository = userRepository
+    }
+
     public async get(id: number): Promise<UserDto> {
-        const user = await userRepository.findOneBy({
+        const user = await this.userRepository.findOneBy({
             id: id,
         })
         if (!user) {
@@ -75,7 +84,7 @@ export class UsersService {
     }
 
     public async post(loginDto: LoginDto): Promise<Token> {
-        const user = await userRepository.findOneBy({
+        const user = await this.userRepository.findOneBy({
             login: loginDto.login,
         })
         if (!user) {
@@ -86,7 +95,11 @@ export class UsersService {
             )
         }
         if (user.activated == false) {
-            throw new Error('Activate your account')
+            throw new ApiError(
+                ErrorsList.ActivateAccount,
+                StatusCodes.BAD_REQUEST,
+                'Activate your account'
+            )
         }
         const authenticated = await comparePass(
             loginDto.password,
@@ -102,12 +115,7 @@ export class UsersService {
 
         const numberRandom = await random()
 
-        await userRepository
-            .createQueryBuilder()
-            .update(User)
-            .set({ tokenSalt: numberRandom })
-            .where('id = :id', { id: user.id })
-            .execute()
+        await this.userRepository.update(user.id, { tokenSalt: numberRandom })
 
         const payload: JWTPayload = {
             id: user.id,
@@ -127,19 +135,8 @@ export class UsersService {
                 'Incorrect email or password'
             )
         }
-        if (
-            body.role != 'admin' &&
-            body.role != 'worker' &&
-            body.role != 'client'
-        ) {
-            throw new ApiError(
-                ErrorsList.IncorrectRolle,
-                StatusCodes.BAD_REQUEST,
-                'Incorrect role entry'
-            )
-        }
 
-        const candidate = await userRepository.findOneBy({
+        const candidate = await this.userRepository.findOneBy({
             email: body.email,
         })
 
@@ -150,7 +147,6 @@ export class UsersService {
                 'User with this email already exists'
             )
         }
-
 
         const hashPassword = await bcrypt.hash(
             body.password,
@@ -174,11 +170,11 @@ export class UsersService {
             `${config.get('apiURL')}/users/signup-by-link/${activationLink}`
         )
 
-        await userRepository.save(newUser)
+        await this.userRepository.save(newUser)
     }
 
     public async updateUser(body: UpdateUserDto, id: number): Promise<Token> {
-        const userToUpdate = await userRepository.findOneBy({
+        const userToUpdate = await this.userRepository.findOneBy({
             id: id,
         })
 
@@ -186,7 +182,7 @@ export class UsersService {
             body.email !== userToUpdate.email ||
             body.login !== userToUpdate.login
         ) {
-            const candidate = await userRepository.findOneBy({
+            const candidate = await this.userRepository.findOneBy({
                 email: body.email,
             })
 
@@ -197,7 +193,7 @@ export class UsersService {
                     'User with this email already exists'
                 )
             }
-            const candidateLogin = await userRepository.findOneBy({
+            const candidateLogin = await this.userRepository.findOneBy({
                 email: body.login,
             })
 
@@ -214,7 +210,7 @@ export class UsersService {
             config.get('saltRounds')
         )
         const numberRandom = await random()
-        await userRepository.update(id, {
+        await this.userRepository.update(id, {
             login: body.login,
             password: hashPassword,
             firstName: body.firstName,
@@ -236,39 +232,31 @@ export class UsersService {
     }
 
     public async getAllUsers(): Promise<UserDto[]> {
-        const users = await userRepository
-            .createQueryBuilder('user')
-            .select([
-                'user.id',
-                'user.firstName',
-                'user.lastName',
-                'user.email',
-                'user.phoneNumber',
-            ])
-            .getMany()
+        const users = await this.userRepository.find({
+            select: {
+                id:true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                phoneNumber: true
+            },
+        })
+
         return users
     }
 
     public async logout(id: number): Promise<void> {
-        await userRepository
-            .createQueryBuilder()
-            .update(User)
-            .set({ tokenSalt: -1 })
-            .where('id = :id', { id: id })
-            .execute()
+        await this.userRepository.update(id,{
+            tokenSalt: -1
+        })
     }
 
     public async deleteUser(id: number): Promise<void> {
-        await userRepository
-            .createQueryBuilder()
-            .delete()
-            .from(User)
-            .where('id = :id', { id: id })
-            .execute()
+        await this.userRepository.delete(id)
     }
 
     public async sign_UpByLink(link: string): Promise<Token> {
-        const user = await userRepository.findOneBy({
+        const user = await this.userRepository.findOneBy({
             activationLink: link,
         })
         if (!user) {
@@ -278,12 +266,9 @@ export class UsersService {
                 'Incorrect activation link'
             )
         }
-        await userRepository
-            .createQueryBuilder()
-            .update(User)
-            .set({ activated: true, activationLink: null })
-            .where('id = :id', { id: user.id })
-            .execute()
+        await this.userRepository.update(user.id, {
+            activated: true, activationLink: null
+        })
 
         const payload: JWTPayload = {
             id: user.id,

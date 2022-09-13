@@ -59,7 +59,7 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => OrderPayment, (orderPayment) => orderPayment.client, {
+  @OneToMany(() => OrderPayment, (orderPayment) => orderPayment.clientId, {
     onDelete: 'CASCADE',
     orphanedRowAction: "delete" 
   })
