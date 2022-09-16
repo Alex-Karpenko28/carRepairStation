@@ -3,6 +3,7 @@ import express, {
     Request as ExRequest,
     NextFunction,
 } from 'express'
+import { Server } from 'http'
 import helmet from 'helmet'
 import bodyParser from 'body-parser'
 import { RegisterRoutes } from './routes'
@@ -14,8 +15,10 @@ import { ApiError } from './error/ApiError'
 import config from './shared/config'
 
 const app = express()
+let server: Server = undefined
 
 const port = config.get('port')
+const createTestDatabase = config.get('createTestDatabase')
 
 app.use(helmet())
 
@@ -58,22 +61,56 @@ app.use(function errorHandler(
         })
     }
 
-     if (err instanceof Error) {
-         return res.status(500).json({
+    if (err instanceof Error) {
+        return res.status(500).json({
             message: 'Internal Server Error',
         })
-     }
+    }
 
     next()
 })
 
-const start = async () => {
+export default app
+
+export const start = async () => {
     try {
-        await AppDataSource.initialize()
-        app.listen(port, () => console.log(`server is listening on ${port}`))
+        if (createTestDatabase) {
+            await AppDataSource.initialize()
+            server = app.listen(port)
+            console.log(`server is listening on ${port}`)
+        } else {
+            await AppDataSource.initialize()
+            server = app.listen(port)
+            console.log(`server is listening on ${port}`)
+        }
     } catch (e) {
         console.log(e)
+        throw e
     }
 }
-
-start()
+export const stop = async () => {
+    try {
+        if (createTestDatabase) {
+            await new Promise<void>((resolve, reject) => {
+                server.close((err) => {
+                    if (err) reject(err)
+                    else resolve()
+                })
+            })
+            await AppDataSource.destroy()
+            console.log(`server is closed on ${port}`)
+        } else {
+            await new Promise<void>((resolve, reject) => {
+                server.close((err) => {
+                    if (err) reject(err)
+                    else resolve()
+                })
+            })
+            await AppDataSource.destroy()
+            console.log(`server is closed on ${port}`)
+        }
+    } catch (e) {
+        console.log(e)
+        throw e
+    }
+}

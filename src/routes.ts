@@ -179,13 +179,14 @@ export function RegisterRoutes(app: express.Router) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-        app.get('/details',
+        app.get('/details/order/:orderId',
             authenticateMiddleware([{"barearAuth":["admin","worker"]}]),
             ...(fetchMiddlewares<RequestHandler>(DetailsController)),
-            ...(fetchMiddlewares<RequestHandler>(DetailsController.prototype.getAllDetails)),
+            ...(fetchMiddlewares<RequestHandler>(DetailsController.prototype.getAllDetailsByOrder)),
 
-            function DetailsController_getAllDetails(request: any, response: any, next: any) {
+            function DetailsController_getAllDetailsByOrder(request: any, response: any, next: any) {
             const args = {
+                    orderId: {"in":"path","name":"orderId","required":true,"dataType":"double"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -197,7 +198,7 @@ export function RegisterRoutes(app: express.Router) {
                 const controller = new DetailsController();
 
 
-              const promise = controller.getAllDetails.apply(controller, validatedArgs as any);
+              const promise = controller.getAllDetailsByOrder.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

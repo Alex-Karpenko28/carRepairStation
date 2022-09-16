@@ -16,15 +16,15 @@ import { DetailService } from './detailService'
 @Tags('detail')
 @Route('/details')
 export class DetailsController extends Controller {
-    @Get()
+    @Get('/order/{orderId}')
     @Security('barearAuth', ['admin', 'worker'])
-    public async getAllDetails(): Promise<DetailDto[]> {
-        return new DetailService().getAllDetails()
+    public async getAllDetailsByOrder(@Path() orderId: number): Promise<DetailDto[]> {
+        return new DetailService().getAllDetailsByOrderId(orderId)
     }
 
     @Get('/{detailId}')
     @Security('barearAuth', ['admin', 'worker'])
-    public async getDetail(@Path() detailId: number): Promise<DetailDto[]> {
+    public async getDetail(@Path() detailId: number): Promise<DetailDto> {
         return new DetailService().getConcreteDetail(detailId)
     }
 

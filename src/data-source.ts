@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 import { User } from './entity/user'
 import { OrderPayment } from './entity/orderPayment'
@@ -13,7 +12,7 @@ export const AppDataSource = new DataSource({
     username: config.get('db.user'),
     password: config.get('db.password'),
     database: config.get('db.name'),
-    synchronize: true,
+    synchronize: false,
     logging: true,
     entities: [User, OrderPayment, Order, Detail],
 })

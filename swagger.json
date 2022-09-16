@@ -388,9 +388,9 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
-		"/details": {
+		"/details/order/{orderId}": {
 			"get": {
-				"operationId": "GetAllDetails",
+				"operationId": "GetAllDetailsByOrder",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -417,44 +417,17 @@
 						]
 					}
 				],
-				"parameters": []
-			},
-			"post": {
-				"operationId": "CreateDetail",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/DetailDto"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"detail"
-				],
-				"security": [
+				"parameters": [
 					{
-						"barearAuth": [
-							"admin",
-							"worker"
-						]
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/CreateDetailDto"
-							}
+						"in": "path",
+						"name": "orderId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
 						}
 					}
-				}
+				]
 			}
 		},
 		"/details/{detailId}": {
@@ -466,10 +439,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/DetailDto"
-									},
-									"type": "array"
+									"$ref": "#/components/schemas/DetailDto"
 								}
 							}
 						}
@@ -577,6 +547,45 @@
 						}
 					}
 				]
+			}
+		},
+		"/details": {
+			"post": {
+				"operationId": "CreateDetail",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DetailDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"detail"
+				],
+				"security": [
+					{
+						"barearAuth": [
+							"admin",
+							"worker"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateDetailDto"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/orders": {

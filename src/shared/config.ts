@@ -1,7 +1,11 @@
 import * as dotenv from 'dotenv'
 import convict from 'convict'
 
-dotenv.config()
+if (process.env.DOTENV_FILE) {
+       dotenv.config({ path: process.env.DOTENV_FILE })
+} else { dotenv.config() }
+
+
 
 const schema = {
     port: {
@@ -79,6 +83,11 @@ const schema = {
         format: String,
         default: 'http://localhost:3000',
         env: 'API_URL',
+    },
+    createTestDatabase: {
+        format: Boolean,
+        default: false,
+        env: 'CREATE_DATA_BASE',
     },
 }
 

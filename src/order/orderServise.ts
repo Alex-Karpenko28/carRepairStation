@@ -18,7 +18,7 @@ export class OrderService {
                 workerId: { id: true },
                 clientId: { id: true },
             }
-        })
+        } as any)
         return orders
     }
 
@@ -33,7 +33,7 @@ export class OrderService {
                 clientId: { id: true },
             },
             where: { id: id },
-        })
+        } as any)
         if (!order) {
             throw new ApiError(
                 ErrorsList.OrderNotFound,
@@ -114,7 +114,7 @@ export class OrderService {
                 clientId: { id: true },
             },
             where: { id: id },
-        })
+        } as any)
 
         return order
     }

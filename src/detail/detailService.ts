@@ -8,29 +8,32 @@ import { StatusCodes } from 'http-status-codes'
 const detailRepository = AppDataSource.getRepository(Detail)
 
 export class DetailService {
-    public async getAllDetails(): Promise<DetailDto[]> {
+    public async getAllDetailsByOrderId(id: number): Promise<DetailDto[]> {
+
         const details = await detailRepository.find({
+            select: {
+                orderId: { id: true },
+            },
             relations: {
-              orderId: true,
-          },
-          select: {
-              orderId: {id:true},
-          }
-          }
-        )
+                orderId: true,
+            },
+
+            where: { orderId: {id: id} },
+        } as any)
+        
         return details
     }
 
-    public async getConcreteDetail(id: number): Promise<DetailDto[]> {
+    public async getConcreteDetail(id: number): Promise<DetailDto> {
         const detail = await detailRepository.find({
             relations: {
                 orderId: true,
             },
             select: {
-                orderId: {id:true},
+                orderId: { id: true },
             },
             where: { id: id },
-        })
+        } as any)
         if (!detail) {
             throw new ApiError(
                 ErrorsList.DetailNotFound,
@@ -38,7 +41,7 @@ export class DetailService {
                 'detail not found'
             )
         }
-        return detail
+        return detail[0]
     }
 
     public async createDetail(
@@ -106,10 +109,10 @@ export class DetailService {
                 orderId: true,
             },
             select: {
-                orderId: {id:true},
+                orderId: { id: true },
             },
             where: { id: id },
-        })
+        } as any)
 
         return detail
     }
@@ -123,4 +126,3 @@ export class DetailService {
             .execute()
     }
 }
-

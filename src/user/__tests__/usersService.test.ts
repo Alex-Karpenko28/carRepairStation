@@ -1,9 +1,6 @@
 import { describe, expect, test, jest } from '@jest/globals'
 import { UserRole } from '../userDto'
 import { UsersService } from '../usersService'
-import { ApiError } from '../../error/ApiError'
-import { ErrorsList } from '../../error/ApiErrorList'
-import { StatusCodes } from 'http-status-codes'
 
 jest.mock('../../shared/mail-servise')
 

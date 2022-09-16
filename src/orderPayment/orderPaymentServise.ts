@@ -19,7 +19,7 @@ async function detailsPriceSummary(orderId: number): Promise<number> {
         select: {
             detailPrice: true,
         },
-    })
+    } as any)
 
     return detailPriceSumDataBase.reduce(
         (accumulator, item) => accumulator + Number(item.detailPrice),
@@ -39,7 +39,7 @@ export class OrderPaymentService {
           orderId: {id:true},
           clientId: {id:true},
       },
-  })
+  } as any)
     return orders
 }
 
@@ -54,7 +54,7 @@ public async getConcreteOrderPayment(id: number): Promise<OrderPaymentDto[]> {
       clientId: {id:true},
   },
       where: { id: id },
-  })
+  } as any)
   if (!orderPayment) {
       throw new ApiError(
           ErrorsList.OrderNotFound,
@@ -145,7 +145,7 @@ public async getConcreteOrderPayment(id: number): Promise<OrderPaymentDto[]> {
           clientId: {id:true},
       },
       where: { id: id },
-      })
+      } as any)
 
       return orderPayment
   }
