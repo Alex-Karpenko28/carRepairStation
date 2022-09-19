@@ -18,7 +18,7 @@ const app = express()
 let server: Server = undefined
 
 const port = config.get('port')
-const createTestDatabase = config.get('createTestDatabase')
+
 
 app.use(helmet())
 
@@ -74,15 +74,9 @@ export default app
 
 export const start = async () => {
     try {
-        if (createTestDatabase) {
-            await AppDataSource.initialize()
-            server = app.listen(port)
-            console.log(`server is listening on ${port}`)
-        } else {
-            await AppDataSource.initialize()
-            server = app.listen(port)
-            console.log(`server is listening on ${port}`)
-        }
+        await AppDataSource.initialize()
+        server = app.listen(port)
+        console.log(`server is listening on ${port}`)
     } catch (e) {
         console.log(e)
         throw e
@@ -90,25 +84,14 @@ export const start = async () => {
 }
 export const stop = async () => {
     try {
-        if (createTestDatabase) {
-            await new Promise<void>((resolve, reject) => {
-                server.close((err) => {
-                    if (err) reject(err)
-                    else resolve()
-                })
+        await new Promise<void>((resolve, reject) => {
+            server.close((err) => {
+                if (err) reject(err)
+                else resolve()
             })
-            await AppDataSource.destroy()
-            console.log(`server is closed on ${port}`)
-        } else {
-            await new Promise<void>((resolve, reject) => {
-                server.close((err) => {
-                    if (err) reject(err)
-                    else resolve()
-                })
-            })
-            await AppDataSource.destroy()
-            console.log(`server is closed on ${port}`)
-        }
+        })
+        await AppDataSource.destroy()
+        console.log(`server is closed on ${port}`)
     } catch (e) {
         console.log(e)
         throw e
