@@ -11,8 +11,8 @@ export const AppDataSource = new DataSource({
     port: config.get('db.port'),
     username: config.get('db.user'),
     password: config.get('db.password'),
-    database: config.get('db.name'),
-    synchronize: false,
+    database: config.get('db.name'),  // you need to create a database with this name
+    synchronize: true, // not for production
     logging: true,
     entities: [User, OrderPayment, Order, Detail],
 })
